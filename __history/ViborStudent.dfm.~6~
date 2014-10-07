@@ -1,0 +1,46 @@
+object Form3: TForm3
+  Left = 0
+  Top = 0
+  Caption = 'Form3'
+  ClientHeight = 461
+  ClientWidth = 423
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object TTVmain: TRzTreeView
+    Left = 0
+    Top = 0
+    Width = 423
+    Height = 398
+    SelectionPen.Color = clBtnShadow
+    Align = alTop
+    Color = clSkyBlue
+    DisabledColor = clCream
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Images = fMain.ILmain
+    Indent = 19
+    ParentFont = False
+    TabOrder = 0
+    OnChange = TTVmainChange
+  end
+  object Button1: TButton
+    Left = 176
+    Top = 412
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+end

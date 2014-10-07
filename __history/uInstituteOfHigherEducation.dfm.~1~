@@ -1,0 +1,326 @@
+object fInstituteOfHigherEducation: TfInstituteOfHigherEducation
+  Left = 218
+  Top = 121
+  Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080' - '#1054#1073#1097#1077#1074#1091#1079#1086#1074#1089#1082#1080#1077
+  ClientHeight = 512
+  ClientWidth = 784
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 471
+    Width = 784
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    ExplicitTop = 430
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 784
+    Height = 471
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitLeft = 168
+    ExplicitTop = 72
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object Panel3: TPanel
+      Left = 323
+      Top = 0
+      Width = 398
+      Height = 471
+      Align = alLeft
+      TabOrder = 1
+      DesignSize = (
+        398
+        471)
+      object Label1: TLabel
+        Left = 8
+        Top = 8
+        Width = 64
+        Height = 13
+        Caption = #1060#1072#1082#1091#1083#1100#1090#1077#1090#1099
+      end
+      object sbFacultyAdd: TSpeedButton
+        Left = 328
+        Top = 440
+        Width = 64
+        Height = 22
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+        OnClick = sbFacultyAddClick
+      end
+      object dbgFaculties: TDBGridEh
+        Left = 8
+        Top = 27
+        Width = 384
+        Height = 398
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        DataGrouping.GroupLevels = <>
+        DataSource = DM.DSFaculties
+        Flat = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = []
+        ParentFont = False
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        UseMultiTitle = True
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'ID'
+            Footers = <>
+            Visible = False
+          end
+          item
+            Alignment = taLeftJustify
+            EditButtons = <>
+            FieldName = 'Department'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Footers = <>
+            KeyList.Strings = (
+              '1'
+              '2')
+            PickList.Strings = (
+              #1044#1054
+              #1054#1047#1054)
+            Title.Alignment = taLeftJustify
+            Title.Caption = #1054#1090#1076#1077#1083#1077#1085#1080#1077
+            Width = 45
+            WordWrap = True
+          end
+          item
+            EditButtons = <>
+            FieldName = 'FacultyName'
+            Footers = <>
+            Title.Caption = #1053#1072#1079#1074#1072#1085#1080#1077
+            Width = 182
+          end
+          item
+            EditButtons = <>
+            FieldName = 'FacultyShortName'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DeanNameF'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DeanNameI'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DeanNameO'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DeanNameS'
+            Footers = <>
+            Title.Caption = #1060#1048#1054' '#1076#1077#1082#1072#1085#1072
+            Width = 115
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object rgDepartment: TRadioGroup
+        Left = 6
+        Top = 431
+        Width = 91
+        Height = 34
+        Caption = #1054#1090#1076#1077#1083#1077#1085#1080#1077
+        Columns = 2
+        ItemIndex = 0
+        Items.Strings = (
+          #1044#1054
+          #1054#1047#1054)
+        TabOrder = 1
+      end
+      object gbFacultyName: TGroupBox
+        Left = 101
+        Top = 431
+        Width = 132
+        Height = 34
+        Caption = #1053#1072#1079#1074#1072#1085#1080#1077
+        TabOrder = 2
+        object eFacultyName: TEdit
+          Left = 2
+          Top = 15
+          Width = 128
+          Height = 17
+          Align = alClient
+          TabOrder = 0
+          OnKeyUp = eFacultyNameKeyUp
+          ExplicitLeft = 3
+          ExplicitTop = 13
+          ExplicitWidth = 212
+          ExplicitHeight = 19
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 239
+        Top = 431
+        Width = 83
+        Height = 34
+        Caption = #1057#1086#1082#1088#1072#1097#1077#1085#1080#1077
+        TabOrder = 3
+        object eFacultyShortName: TEdit
+          Left = 2
+          Top = 15
+          Width = 79
+          Height = 17
+          Align = alClient
+          TabOrder = 0
+          OnKeyUp = eFacultyShortNameKeyUp
+          ExplicitLeft = 8
+          ExplicitTop = 16
+          ExplicitWidth = 121
+          ExplicitHeight = 21
+        end
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Top = 0
+      Width = 323
+      Height = 471
+      Align = alLeft
+      TabOrder = 0
+      ExplicitLeft = 2
+      DesignSize = (
+        323
+        471)
+      object Label2: TLabel
+        Left = 8
+        Top = 8
+        Width = 63
+        Height = 13
+        Caption = #1055#1088#1086#1088#1077#1082#1090#1086#1088#1099
+      end
+      object DBGridEh2: TDBGridEh
+        Left = 8
+        Top = 27
+        Width = 309
+        Height = 118
+        AllowedOperations = [alopUpdateEh]
+        AllowedSelections = [gstRecordBookmarks]
+        Anchors = [akLeft, akTop, akRight]
+        DataGrouping.GroupLevels = <>
+        DataSource = DM.dsDepartmentInfo
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = []
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        UseMultiTitle = True
+        OnCellClick = DBGridEh2CellClick
+        OnKeyUp = DBGridEh2KeyUp
+        Columns = <
+          item
+            Alignment = taLeftJustify
+            EditButtons = <>
+            FieldName = 'id'
+            Footers = <>
+            KeyList.Strings = (
+              '1'
+              '2')
+            PickList.Strings = (
+              #1044#1054
+              #1054#1047#1054)
+            Title.Alignment = taLeftJustify
+            Title.Caption = #1054#1090#1076#1077#1083#1077#1085#1080#1077
+            Width = 45
+            WordWrap = True
+          end
+          item
+            EditButtons = <>
+            FieldName = 'prorectorNameF'
+            Footers = <>
+            Title.Caption = #1060#1072#1084#1080#1083#1080#1103
+            Width = 62
+          end
+          item
+            EditButtons = <>
+            FieldName = 'prorectorNameI'
+            Footers = <>
+            Title.Caption = #1048#1084#1103
+            Width = 68
+          end
+          item
+            EditButtons = <>
+            FieldName = 'prorectorNameO'
+            Footers = <>
+            Title.Caption = #1054#1090#1095#1077#1089#1090#1074#1086
+            Width = 91
+          end
+          item
+            EditButtons = <>
+            FieldName = 'prorectorNameS'
+            Footers = <>
+            Visible = False
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
+    object Panel5: TPanel
+      Left = 721
+      Top = 0
+      Width = 63
+      Height = 471
+      Align = alClient
+      TabOrder = 2
+      ExplicitLeft = 479
+      ExplicitTop = 64
+      ExplicitWidth = 185
+      ExplicitHeight = 41
+    end
+  end
+end

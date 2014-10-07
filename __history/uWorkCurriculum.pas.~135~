@@ -1,0 +1,942 @@
+unit uWorkCurriculum;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, Buttons,
+  RzPanel, RzRadGrp, ADODB, Mask, DBCtrlsEh, DBLookupEh,DateUtils , ComCtrls,
+  RzEdit, RzDBEdit, DBCtrls,   frxClass, Clipbrd, Menus,db;
+    {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TfWorkCurriculum = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    dbgWorkCurrDisc: TDBGridEh;
+    sbClose: TSpeedButton;
+    rgSemesterSelect: TRzRadioGroup;
+    cbSemesterRight: TComboBox;
+    cbSemesterLeft: TComboBox;
+    cbSemesterSelect: TComboBox;
+    Label1: TLabel;
+    cgControlFormSelect: TRzCheckGroup;
+    sbDisciplineAdd: TSpeedButton;
+    sbDisciplineDelete: TSpeedButton;
+    gbDisciplineAdd: TRzGroupBox;
+    lcbDiscipline: TDBLookupComboboxEh;
+    cbSemester: TComboBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    sbDisciplineAddOK: TSpeedButton;
+    sbDisciplineAddCancel: TSpeedButton;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Panel5: TPanel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    SpeedButton3: TSpeedButton;
+    sbMarkSheetPrint: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    SpeedButton9: TSpeedButton;
+    panel: TPanel;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    Button1: TButton;
+    SpeedButton10: TSpeedButton;
+    ProgressBar1: TProgressBar;
+    Panel3: TPanel;
+    Label6: TLabel;
+    procedure rbSemesterSelectClick(Sender: TObject);
+    procedure rbSemesterRangeClick(Sender: TObject);
+    procedure rgSemesterSelectChanging(Sender: TObject; NewIndex: Integer;
+      var AllowChange: Boolean);
+    procedure cbSemesterSelectChange(Sender: TObject);
+    procedure cbSemesterLeftChange(Sender: TObject);
+    procedure cbSemesterRightChange(Sender: TObject);
+    procedure cbSemesterSelectClick(Sender: TObject);
+    procedure cbSemesterLeftClick(Sender: TObject);
+    procedure cbSemesterRightClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure cgControlFormSelectChange(Sender: TObject; Index: Integer;
+      NewState: TCheckBoxState);
+    procedure sbCloseClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure sbDisciplineDeleteClick(Sender: TObject);
+    procedure sbDisciplineAddClick(Sender: TObject);
+    procedure sbDisciplineAddCancelClick(Sender: TObject);
+    procedure sbDisciplineAddOKClick(Sender: TObject);
+    procedure dbgWorkCurrDiscColumns13EditButtonClick(Sender: TObject;
+      var Handled: Boolean);
+    procedure dbgWorkCurrDiscMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Panel2MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Panel3MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2DblClick(Sender: TObject);
+    procedure dbgWorkCurrDiscDblClick(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+  private
+    { Private declarations }
+    procedure SetFilter(SemesterLeft, SemesterRight: byte);
+  public
+    { Public declarations }
+  end;
+
+
+var
+  fWorkCurriculum: TfWorkCurriculum;
+
+implementation
+
+{$R *.dfm}
+
+uses
+   uMain, uSessionDetails, uDM, uDMreports, uAddErorWCD, ueditworcdisc,
+  SessionDates, PerevStud;
+
+procedure TfWorkCurriculum.Button1Click(Sender: TObject);
+var
+  Memo8, Memo9, Memo10: TfrxMemoView;
+begin
+
+  DMreports.frxrAttestZachet.Variables['s'] := '''' + dm.adodsWorkCurrDiscSemester.AsString + '''';
+DMreports.frxrAttestZachet.Variables['k'] := '''' + inttostr(fmain.TTVmain.Selected.Parent.StateIndex) + '''';
+DMreports.frxrAttestZachet.Variables['g'] := '''' + fmain.TTVmain.Selected.Text + '''';
+
+  DMreports.adodsMarkSheetExam.Close;
+  if(fMain.TTVmain.Selected.Level=2)
+  then DMreports.adodsMarkSheetExam.Parameters[1].Value := fMain.TTVmain.Selected.StateIndex
+  else DMreports.adodsMarkSheetExam.Parameters[1].Value := fMain.TTVmain.Selected.Parent.StateIndex;
+
+   DMreports.adodsMarkSheetExam.Parameters[3].Value := 1;
+  DMreports.adodsMarkSheetExam.Parameters[2].Value := dm.adodsWorkCurrDiscid.AsInteger;
+  DMreports.adodsMarkSheetExam.Open;
+   if DMreports.adodsMarkSheetExam.RecordCount<25 then
+   begin
+  Memo8  := DMreports.frxrMarkSheetExam.FindComponent('Memo8') as TfrxMemoView;
+  Memo9  := DMreports.frxrMarkSheetExam.FindComponent('Memo9') as TfrxMemoView;
+  Memo10 := DMreports.frxrMarkSheetExam.FindComponent('Memo10') as TfrxMemoView;
+   end
+   else
+   begin
+  Memo8  := DMreports.frxrMarkSheetExam2.FindComponent('Memo8') as TfrxMemoView;
+  Memo9  := DMreports.frxrMarkSheetExam2.FindComponent('Memo9') as TfrxMemoView;
+  Memo10 := DMreports.frxrMarkSheetExam2.FindComponent('Memo10') as TfrxMemoView;
+   end;
+  if(DM.adodsWorkCurrDiscControlTest.AsBoolean)
+  then
+      begin
+      Memo8.Visible := false;
+      Memo9.Visible := false;
+      Memo10.Visible := false;
+      end
+  else
+      begin
+      Memo8.Visible := true;
+      Memo9.Visible := true;
+      Memo10.Visible := true;
+      end;
+         DMreports.frxrAttestZachet.ShowReport()
+end;
+
+procedure TfWorkCurriculum.Button2Click(Sender: TObject);
+begin
+Panel5.Visible:=false;
+DM.adodsWorkCurrDisc.UpdateBatch();
+end;
+
+procedure TfWorkCurriculum.Button3Click(Sender: TObject);
+begin
+ Panel5.Visible:=false;
+   dm.adodsWorkCurrDisc.close;
+  dm.adodsWorkCurrDisc.open;
+  DM.adodsWorkCurrDisc.UpdateBatch();
+end;
+
+procedure TfWorkCurriculum.Button4Click(Sender: TObject);
+begin
+Panel5.Visible:=false;
+DBDateTimeEditEh1.Text:='';
+DBDateTimeEditEh2.Text:='';
+
+end;
+
+procedure TfWorkCurriculum.cbSemesterLeftChange(Sender: TObject);
+begin
+  SetFilter(cbSemesterLeft.ItemIndex+1, cbSemesterRight.ItemIndex+1);
+end;
+
+procedure TfWorkCurriculum.cbSemesterLeftClick(Sender: TObject);
+begin
+  rgSemesterSelect.ItemIndex := 2;
+end;
+
+procedure TfWorkCurriculum.cbSemesterRightChange(Sender: TObject);
+begin
+  SetFilter(cbSemesterLeft.ItemIndex+1, cbSemesterRight.ItemIndex+1);
+end;
+
+procedure TfWorkCurriculum.cbSemesterRightClick(Sender: TObject);
+begin
+  rgSemesterSelect.ItemIndex := 2;
+end;
+
+procedure TfWorkCurriculum.cbSemesterSelectChange(Sender: TObject);
+begin
+  SetFilter(cbSemesterSelect.ItemIndex+1, cbSemesterSelect.ItemIndex+1);
+end;
+
+procedure TfWorkCurriculum.cbSemesterSelectClick(Sender: TObject);
+begin
+  rgSemesterSelect.ItemIndex := 1;
+end;
+
+procedure TfWorkCurriculum.cgControlFormSelectChange(Sender: TObject;
+  Index: Integer; NewState: TCheckBoxState);
+begin
+  Case(rgSemesterSelect.ItemIndex)of
+    0:
+        begin
+        SetFilter(0,0);
+        end;
+    1:
+        begin
+        SetFilter(cbSemesterSelect.ItemIndex+1, cbSemesterSelect.ItemIndex+1);
+        end;
+    2:
+        begin
+        SetFilter(cbSemesterLeft.ItemIndex+1, cbSemesterRight.ItemIndex+1);
+        end;
+  End;
+end;
+
+procedure TfWorkCurriculum.dbgWorkCurrDiscColumns13EditButtonClick(
+  Sender: TObject; var Handled: Boolean);
+  var MyMouse: TMouse;
+begin
+//   if  Dm.adodsWorkCurrDiscDateChange.Value=0 then
+//   begin
+//   DBDateTimeEditEh2.Text:=datetostr(date);
+//    DBDateTimeEditEh1.Text:=timetostr(time);
+//   end;
+//if (MyMouse.CursorPos.y)>((fWorkCurriculum.Height+fWorkCurriculum.Top)-170) then
+//  begin
+//   Panel5.Left:= MyMouse.CursorPos.x-Panel5.Width-fWorkCurriculum.Left-10;
+//Panel5.top:= MyMouse.CursorPos.y-Panel5.Height-fWorkCurriculum.Top-115;
+//  end
+//else
+//begin
+//Panel5.Left:= MyMouse.CursorPos.x-Panel5.Width-fWorkCurriculum.Left-10;
+//Panel5.top:= MyMouse.CursorPos.y-Panel5.Height-fWorkCurriculum.Top;
+//end;
+//Panel5.Visible:=true;
+end;
+
+procedure TfWorkCurriculum.dbgWorkCurrDiscDblClick(Sender: TObject);
+begin
+   if feditworcdisc=nil then
+    Application.CreateForm(Tfeditworcdisc, feditworcdisc);
+
+
+ if  Dm.adodsWorkCurrDiscDateChange.Value=0 then
+      feditworcdisc.Button1.Visible:=true
+    else
+    feditworcdisc.Panel5.Visible:=true;
+feditworcdisc.Show;
+end;
+
+procedure TfWorkCurriculum.dbgWorkCurrDiscMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+if Panel5.Visible=true then
+begin
+     dm.adodsWorkCurrDisc.close;
+  dm.adodsWorkCurrDisc.open;
+  DM.adodsWorkCurrDisc.UpdateBatch();
+end;
+
+Panel5.Visible:=false;
+
+end;
+
+procedure TfWorkCurriculum.SetFilter(SemesterLeft, SemesterRight: byte);
+var
+  Fltr, sTemp : string;
+begin
+  Fltr := '';
+  sTemp := '';
+
+  if(SemesterLeft=0)
+  then sTemp := ''
+  else sTemp := 'Semester>='+inttostr(SemesterLeft)+' and Semester<='+inttostr(SemesterRight)+'';
+
+  Fltr := sTemp;
+
+//фильтр экзаменов
+  if(not(cgControlFormSelect.ItemChecked[0]))
+  then
+      if(Fltr<>'')
+      then Fltr:=Fltr+' and ControlExamination=0'
+      else Fltr:=Fltr+'ControlExamination=0';
+
+  if(not(cgControlFormSelect.ItemChecked[1]))
+  then
+      if(Fltr<>'')
+      then Fltr:=Fltr+' and ControlTest=0'
+      else Fltr:=Fltr+'ControlTest=0';
+
+  if(not(cgControlFormSelect.ItemChecked[2]))
+  then
+      if(Fltr<>'')
+      then Fltr:=Fltr+' and ControlCourseWork=0'
+      else  Fltr:=Fltr+'ControlCourseWork=0';
+
+//  showmessage(Fltr);
+  DM.adodsWorkCurrDisc.Filter := Fltr;
+
+  dbgWorkCurrDisc.SumList.RecalcAll;
+end;
+
+procedure TfWorkCurriculum.SpeedButton10Click(Sender: TObject);
+
+begin
+  DMreports.adodsMarkSheetExam.Close;
+  if(fMain.TTVmain.Selected.Level=2)
+  then DMreports.adodsMarkSheetExam.Parameters[1].Value :=fMain.TTVmain.Selected.StateIndex
+  else DMreports.adodsMarkSheetExam.Parameters[1].Value :=dm.adodsStudentDataIDGroup.AsInteger;
+
+   DMreports.adodsMarkSheetExam.Parameters[3].Value := 1;
+  DMreports.adodsMarkSheetExam.Parameters[2].Value := dm.adodsWorkCurrDiscid.AsInteger;
+  DMreports.adodsMarkSheetExam.Open;
+
+DMreports.frxRVedGOS.ShowReport();
+
+end;
+
+procedure TfWorkCurriculum.SpeedButton1Click(Sender: TObject);
+var
+  Memo8, Memo9, Memo10: TfrxMemoView;
+begin
+if (DM.adodsWorkCurrDiscControlTest.AsBoolean=false)and(DM.adodsWorkCurrDiscControlExamination.AsBoolean=false) and (DM.adodsWorkCurrDiscControlCourseWork.AsBoolean=false)then
+begin
+  Showmessage('Дисциплина не имеет формы отчетности');
+  exit;
+end;
+
+  DMreports.adodsMarkSheetExam.Close;
+  if(fMain.TTVmain.Selected.Level=2)
+  then DMreports.adodsMarkSheetExam.Parameters[1].Value := fMain.TTVmain.Selected.StateIndex
+  else DMreports.adodsMarkSheetExam.Parameters[1].Value := fMain.TTVmain.Selected.Parent.StateIndex;
+
+   DMreports.adodsMarkSheetExam.Parameters[3].Value := 1;
+  DMreports.adodsMarkSheetExam.Parameters[2].Value := dm.adodsWorkCurrDiscid.AsInteger;
+  DMreports.adodsMarkSheetExam.Open;
+      if CheckBox1.checked then
+      begin
+           Memo8  := DMreports.frxrMarkSheetExamclear.FindComponent('Memo8') as TfrxMemoView;
+  Memo9  := DMreports.frxrMarkSheetExamclear.FindComponent('Memo9') as TfrxMemoView;
+  Memo10 := DMreports.frxrMarkSheetExamclear.FindComponent('Memo10') as TfrxMemoView;
+      end
+      else
+      begin
+   if DMreports.adodsMarkSheetExam.RecordCount<25 then
+   begin
+  Memo8  := DMreports.frxrMarkSheetExam.FindComponent('Memo8') as TfrxMemoView;
+  Memo9  := DMreports.frxrMarkSheetExam.FindComponent('Memo9') as TfrxMemoView;
+  Memo10 := DMreports.frxrMarkSheetExam.FindComponent('Memo10') as TfrxMemoView;
+   end
+   else
+   begin
+  Memo8  := DMreports.frxrMarkSheetExam2.FindComponent('Memo8') as TfrxMemoView;
+  Memo9  := DMreports.frxrMarkSheetExam2.FindComponent('Memo9') as TfrxMemoView;
+  Memo10 := DMreports.frxrMarkSheetExam2.FindComponent('Memo10') as TfrxMemoView;
+   end;
+      end;
+  if(DM.adodsWorkCurrDiscControlTest.AsBoolean)
+  then
+      begin
+      Memo8.Visible := false;
+      Memo9.Visible := false;
+      Memo10.Visible := false;
+      end
+  else
+      begin
+      Memo8.Visible := true;
+      Memo9.Visible := true;
+      Memo10.Visible := true;
+      end;
+     if CheckBox1.checked then
+       DMreports.frxrMarkSheetExamclear.ShowReport()
+       else
+       begin
+   if DMreports.adodsMarkSheetExam.RecordCount<25 then
+DMreports.frxrMarkSheetExam.ShowReport()
+else
+DMreports.frxrMarkSheetExam2.ShowReport();
+       end;
+end;
+
+procedure TfWorkCurriculum.SpeedButton2Click(Sender: TObject);
+begin
+ Application.CreateForm(Tfeditworcdisc, feditworcdisc);
+ if  Dm.adodsWorkCurrDiscDateChange.Value=0 then
+      feditworcdisc.Button1.Visible:=true
+    else
+    feditworcdisc.Panel5.Visible:=true;
+feditworcdisc.ShowModal;
+end;
+
+procedure TfWorkCurriculum.SpeedButton2DblClick(Sender: TObject);
+begin
+ if  Dm.adodsWorkCurrDiscDateChange.Value=0 then
+      feditworcdisc.Button1.Visible:=true
+    else
+    feditworcdisc.Panel5.Visible:=true;
+feditworcdisc.ShowModal;
+end;
+
+procedure TfWorkCurriculum.SpeedButton3Click(Sender: TObject);
+
+begin
+
+if(MessageBox(handle, ('Все предыдущие связи будут утеряны.Нажмите ОК, если хотите продолжить  '), 'Внимание!', MB_OKCANCEL)=IDOK)
+      then
+          begin
+           fmain.sbLoadPlan.Click;
+          end
+      else exit
+
+
+end;
+
+procedure TfWorkCurriculum.SpeedButton4Click(Sender: TObject);
+begin
+
+  DMreports.ADODSLogWorkCurrDisc.Close;
+  DMreports.ADODSLogWorkCurrDisc.Parameters[1].Value := dm.adodsWorkCurriculumidGroup.AsInteger;
+  DMreports.ADODSLogWorkCurrDisc.Parameters[2].Value := dm.adodsWorkCurrDiscIDSubject.AsInteger;
+  DMreports.ADODSLogWorkCurrDisc.open;
+  DMreports.frxLogWorkCurrDisc.Variables['x'] :=''''+dm.adodsGroupDataGroupName.AsString+'''';
+  DMreports.frxLogWorkCurrDisc.ShowReport();
+
+end;
+
+procedure TfWorkCurriculum.SpeedButton5Click(Sender: TObject);
+begin
+  DMreports.ADODSLogWorkCurrDisc.Close;
+  DMreports.ADODSLogWorkCurrDisc.Parameters[1].Value := dm.adodsWorkCurriculumidGroup.AsInteger;
+  DMreports.ADODSLogWorkCurrDisc.Parameters[2].Value := 0;
+  DMreports.ADODSLogWorkCurrDisc.open;
+  DMreports.frxLogWorkCurrDisc.Variables['x'] :=''''+dm.adodsGroupDataGroupName.AsString+'''';
+  DMreports.frxLogWorkCurrDisc.ShowReport();
+end;
+
+procedure TfWorkCurriculum.SpeedButton6Click(Sender: TObject);
+begin
+dm.adodsSessionDate.close;
+dm.adodsSessionDate.parameters[0].value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+dm.adodsSessionDate.open;
+SessionDate.ShowModal;
+end;
+
+procedure TfWorkCurriculum.SpeedButton7Click(Sender: TObject);
+begin
+ dm.ADODUpdSessionOld.close;
+ dm.ADODUpdSessionOld.Parameters[1].Value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+dm.ADODUpdSessionOld.open;
+end;
+
+procedure TfWorkCurriculum.SpeedButton8Click(Sender: TObject);
+begin
+DMreports.adodsatestvedom.close;
+DMreports.adodsatestvedom.parameters[1].value:=fmain.TTVmain.Selected.StateIndex;
+DMreports.adodsatestvedom.parameters[2].value:=dm.adodsWorkCurriculumid.AsInteger;
+DMreports.adodsatestvedom.parameters[3].value:=dm.adodsWorkCurrDiscSemester.AsInteger;
+DMreports.adodsatestvedom.open;
+   DMreports.frxratestvedomclear.Variables['s'] := '''' + dm.adodsWorkCurrDiscSemester.AsString + '''';
+DMreports.frxratestvedomclear.Variables['k'] := '''' + inttostr(fmain.TTVmain.Selected.Parent.StateIndex) + '''';
+DMreports.frxratestvedomclear.Variables['g'] := '''' + fmain.TTVmain.Selected.Text + '''';
+
+
+     if dm.ADODSStudentList.RecordCount<18 then
+     begin
+     DMreports.frxratestvedom.Variables['s'] := '''' + dm.adodsWorkCurrDiscSemester.AsString + '''';
+DMreports.frxratestvedom.Variables['k'] := '''' + inttostr(fmain.TTVmain.Selected.Parent.StateIndex) + '''';
+DMreports.frxratestvedom.Variables['g'] := '''' + fmain.TTVmain.Selected.Text + '''';
+    if CheckBox2.checked then
+     DMreports.frxratestvedomClear.showreport
+     else
+  DMreports.frxratestvedom.showreport ;
+
+
+     end
+     else
+ begin
+ DMreports.frxratestvedom2.Variables['s'] := '''' + dm.adodsWorkCurrDiscSemester.AsString + '''';
+DMreports.frxratestvedom2.Variables['k'] := '''' + inttostr(fmain.TTVmain.Selected.Parent.StateIndex) + '''';
+DMreports.frxratestvedom2.Variables['g'] := '''' + fmain.TTVmain.Selected.Text + '''';
+     if CheckBox2.checked then
+     DMreports.frxratestvedomClear.showreport
+     else
+ DMreports.frxratestvedom2.showreport ;
+
+
+     end;
+
+
+end;
+
+procedure TfWorkCurriculum.SpeedButton9Click(Sender: TObject);
+begin
+
+DMreports.ADODRSG.close;
+DMreports.ADODRSG.parameters[0].value:=fMain.TTVmain.Selected.StateIndex;
+DMreports.ADODRSG.parameters[1].value:=DM.adodsWorkCurrDiscsemester.AsInteger;
+DMreports.ADODRSG.parameters[2].value:=DM.adodsWorkCurrDiscidsubject.AsInteger;
+DMreports.ADODRSG.open;
+DMreports.ADODSResultDisciplinOfGroup.close;
+DMreports.ADODSResultDisciplinOfGroup.parameters[0].value:=fMain.TTVmain.Selected.StateIndex;
+DMreports.ADODSResultDisciplinOfGroup.parameters[1].value:=DM.adodsWorkCurrDiscsemester.AsInteger;
+DMreports.ADODSResultDisciplinOfGroup.parameters[2].value:=DM.adodsWorkCurrDiscidsubject.AsInteger;
+DMreports.ADODSResultDisciplinOfGroup.open;
+  DMreports.frxRResultDisciplinOfGroup.showreport();
+
+end;
+
+procedure TfWorkCurriculum.sbDisciplineAddOKClick(Sender: TObject);
+var
+  WorkCurriculumModified : boolean;
+  CurRec: TBytes;
+begin
+ProgressBar1.Position:=0;
+ label6.caption:='Подготовка...';
+Panel3.visible:=true;
+  DM.ADODSmaxSem.close;
+    DM.ADODSmaxSem.parameters[0].value:=DM.adodsGroupDataID.Asinteger;;
+     DM.ADODSmaxSem.open;
+  if(lcbDiscipline.KeyValue=0)
+  then exit;
+  WorkCurriculumModified := false;
+  DM.adodsWorkCurrDisc.Next;
+  DM.adodsWorkCurrDisc.Prior;
+////
+////  DM.dsWorkCurrDisc.DataSet := nil;
+ CurRec := DM.adodsWorkCurrDisc.GetBookmark;
+//
+//  DM.adodsWorkCurrDisc.First;
+//  while(not(DM.adodsWorkCurrDisc.Eof))do
+//      begin
+//      if(DM.adodsWorkCurrDisc.RecordStatus * [rsNew, rsDeleted, rsModified, rsOK])<>[]
+//      then WorkCurriculumModified := true; //
+//      DM.adodsWorkCurrDisc.Next; //
+//   end;
+//     DM.adodsWorkCurrDisc.GotoBookmark(CurRec);
+////  DM.dsWorkCurrDisc.DataSet := DM.adodsWorkCurrDisc;
+ label6.caption:='Начало добавления...';
+ProgressBar1.Position:=ProgressBar1.Position+10;
+sleep(1000);
+ProgressBar1.Position:=ProgressBar1.Position+10;
+  if(WorkCurriculumModified)
+  then
+      if(MessageBox(handle, 'Перед добавлением новой дисциплины необходимо сохранить изменения в плане! Нажмите "ОК", чтобы сохранить изменения и добавить дисциплину, либо "Отмена", чтобы отменить действие', 'Внимание!', MB_OKCANCEL)=IDOK)
+      then
+          begin
+          DM.adodsAddWorkCurrDisc.Close;
+          DM.adodsAddWorkCurrDisc.Parameters[0].Value := DM.adodsWorkCurriculumID.AsInteger;
+          DM.adodsAddWorkCurrDisc.Parameters[1].Value := cbSemester.ItemIndex+1;
+          DM.adodsAddWorkCurrDisc.Parameters[2].Value := lcbDiscipline.Text;
+          DM.adodsAddWorkCurrDisc.Parameters[3].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[4].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[5].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[6].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[7].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[8].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[9].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[10].Value := 0;
+          DM.adodsAddWorkCurrDisc.Parameters[11].Value := 0;
+          DM.adodsAddWorkCurrDisc.Open;
+          DM.ADOCLogWorKCurDisc.Parameters[1].Value :=DM.adodsSecurityGetRightsid.asinteger;
+          DM.ADOCLogWorKCurDisc.Parameters[2].Value :=cbSemester.ItemIndex+1;
+          DM.ADOCLogWorKCurDisc.Parameters[3].Value := lcbDiscipline.KeyValue ;
+          DM.ADOCLogWorKCurDisc.Parameters[4].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[5].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[6].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[7].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[8].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[9].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[10].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[11].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[12].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[13].Value :=NULL;
+          DM.ADOCLogWorKCurDisc.Parameters[14].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[15].Value := DM.adodsAddWorkCurrDisc.FieldValues['id'] ;
+         dm.ADOCLogWorKCurDisc.Parameters[16].Value :=DM.adodsWorkCurriculumid.AsInteger;
+                dm.ADOCLogWorKCurDisc.Execute;
+          end
+      else exit
+  else
+      begin
+      DM.adodsAddWorkCurrDisc.Close;
+      DM.adodsAddWorkCurrDisc.Parameters[0].Value :=DM.adodsWorkCurriculumid.AsInteger;
+      DM.adodsAddWorkCurrDisc.Parameters[1].Value := cbSemester.ItemIndex+1;
+      DM.adodsAddWorkCurrDisc.Parameters[2].Value := lcbDiscipline.Text;
+      DM.adodsAddWorkCurrDisc.Parameters[3].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[4].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[5].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[6].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[7].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[8].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[9].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[10].Value := 0;
+      DM.adodsAddWorkCurrDisc.Parameters[11].Value := 0;
+      DM.adodsAddWorkCurrDisc.Open;
+       label6.caption:='Запись логов';
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+      sleep(1000);
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+          DM.ADOCLogWorKCurDisc.Parameters[1].Value :=DM.adodsSecurityGetRightsid.asinteger;
+          DM.ADOCLogWorKCurDisc.Parameters[2].Value :=cbSemester.ItemIndex+1;
+          DM.ADOCLogWorKCurDisc.Parameters[3].Value := lcbDiscipline.KeyValue ;
+          DM.ADOCLogWorKCurDisc.Parameters[4].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[5].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[6].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[7].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[8].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[9].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[10].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[11].Value := 0;
+
+          DM.ADOCLogWorKCurDisc.Parameters[12].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[13].Value :=NULL;
+          DM.ADOCLogWorKCurDisc.Parameters[14].Value := 0;
+          DM.ADOCLogWorKCurDisc.Parameters[15].Value := DM.adodsAddWorkCurrDisc.FieldValues['id'] ;
+         dm.ADOCLogWorKCurDisc.Parameters[16].Value :=DM.adodsWorkCurriculumid.AsInteger;
+                dm.ADOCLogWorKCurDisc.Execute;
+      end;
+       label6.caption:='Перестроение списка';
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+sleep(1000);
+ProgressBar1.Position:=ProgressBar1.Position+10;
+  DM.adodsWorkCurrDisc.Close;
+  DM.adodsWorkCurrDisc.Open;
+    if (cbSemester.ItemIndex+1)>DM.ADODSmaxSemsem.asinteger then
+    begin
+      dm.ADOSQLExecutor.CommandText:='insert into SessionDates (IDGroup, Semester) values('+DM.adodsGroupDataID.AsString+','+inttostr(cbSemester.ItemIndex+1)+')' ;
+  dm.ADOSQLExecutor.Execute;
+  dm.adodsSessionDate.close;
+dm.adodsSessionDate.parameters[0].value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+dm.adodsSessionDate.open;
+SessionDate.ShowModal;
+    end;
+     label6.caption:='Завершение...';
+    ProgressBar1.Position:=ProgressBar1.Position+10;
+sleep(1000);
+ProgressBar1.Position:=ProgressBar1.Position+30;
+    gbDisciplineAdd.Visible:=false;
+  if(DM.adodsWorkCurrDisc.Locate('id', DM.adodsAddWorkCurrDisc.Fields.Fields[0].AsInteger, []))
+  then
+  else
+  DM.adodsWorkCurrDisc.GotoBookmark(CurRec);
+  Panel3.visible:=false;
+end;
+
+procedure TfWorkCurriculum.sbDisciplineAddCancelClick(Sender: TObject);
+begin
+  gbDisciplineAdd.Hide;
+end;
+
+procedure TfWorkCurriculum.sbCloseClick(Sender: TObject);
+var
+  msgResult : Integer;
+  WorkCurriculumModified : boolean;
+  CurRec:  TBookmark;
+  i:TTreeNode;
+begin
+  WorkCurriculumModified := false;
+
+DM.adodsWorkCurrDisc.Next;
+DM.adodsWorkCurrDisc.Prior;
+
+//DM.dsWorkCurrDisc.DataSet := nil;
+//CurRec := DM.adodsWorkCurrDisc.GetBookmark;
+
+  DM.adodsWorkCurrDisc.First;
+  while(not(DM.adodsWorkCurrDisc.Eof))do
+      begin
+      if(DM.adodsWorkCurrDisc.RecordStatus * [rsNew, rsDeleted, rsModified, rsOK])<>[]
+      then WorkCurriculumModified := true;
+
+      DM.adodsWorkCurrDisc.Next;
+      end;
+
+
+//DM.adodsWorkCurrDisc.GotoBookmark(CurRec);
+//DM.dsWorkCurrDisc.DataSet := DM.adodsWorkCurrDisc;
+
+
+
+  if(WorkCurriculumModified)
+  then
+      begin
+      msgResult := MessageBox(handle, 'В рабочем плане сделаны изменения! Сохранить?', 'Внимание!', mb_YesNoCancel);
+
+      if(msgResult=idYes)
+      then
+          begin
+          DM.adodsWorkCurrDisc.UpdateBatch();
+           DM.ADOCLogWorKCurDisc.Parameters[1].Value :=DM.adodsSecurityGetRightsid.asinteger;
+          DM.ADOCLogWorKCurDisc.Parameters[2].Value :=dm.adodsWorkCurrDiscSemester.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[3].Value :=dm.adodsWorkCurrDiscIDSubject.AsInteger ;
+          DM.ADOCLogWorKCurDisc.Parameters[4].Value :=dm.adodsWorkCurrDiscHourLecture.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[5].Value :=dm.adodsWorkCurrDiscHourSeminar.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[6].Value :=dm.adodsWorkCurrDiscHourPractice.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[7].Value :=dm.adodsWorkCurrDiscHourSmallGroup.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[8].Value :=dm.adodsWorkCurrDiscHourIndividual.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[9].Value :=dm.adodsWorkCurrDiscHourSelfWork.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[10].Value :=dm.adodsWorkCurrDiscControlTest.AsBoolean;
+          DM.ADOCLogWorKCurDisc.Parameters[11].Value :=dm.adodsWorkCurrDiscControlExamination.AsBoolean;
+
+          DM.ADOCLogWorKCurDisc.Parameters[12].Value :=dm.adodsWorkCurrDiscControlCourseWork.AsBoolean;
+          DM.ADOCLogWorKCurDisc.Parameters[13].Value :=dm.adodsWorkCurrDiscDateChange.AsDateTime;
+          DM.ADOCLogWorKCurDisc.Parameters[14].Value :=2;
+          DM.ADOCLogWorKCurDisc.Parameters[15].Value :=dm.adodsWorkCurrDiscID.AsInteger;
+         dm.ADOCLogWorKCurDisc.Parameters[16].Value :=DM.adodsWorkCurriculumid.AsInteger;
+                dm.ADOCLogWorKCurDisc.Execute;
+ dm.ADODUpdSessionOld.close;
+ dm.ADODUpdSessionOld.Parameters[1].Value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+ dm.ADODUpdSessionOld.open;
+i:=fmain.TTVmain.Selected.GetNext;
+while i.Level>2 do
+begin
+dm.ADODMarks.close;
+     dm.ADODMarks.Parameters[1].Value:=i.StateIndex;
+     dm.ADODMarks.open;
+ i.ImageIndex:=dm.ADodmarks.Fields.Fields[0].AsInteger;
+ i.SelectedIndex:=dm.ADodmarks.Fields.Fields[0].AsInteger;
+ i:=i.GetNext;
+end;
+          Close;
+            Dm.adodsWorkCurrDisc.Close;
+    Dm.adodsWorkCurrDisc.open;
+          end;
+
+      if(msgResult=idNo)
+      then
+          begin
+          DM.adodsWorkCurrDisc.CancelBatch();
+          Close;
+          end;
+      end
+ else fWorkCurriculum.Close;
+
+end;
+
+procedure TfWorkCurriculum.sbDisciplineAddClick(Sender: TObject);
+begin
+  gbDisciplineAdd.Show;
+  dm.ADODUpdSessionOld.close;
+ dm.ADODUpdSessionOld.Parameters[1].Value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+dm.ADODUpdSessionOld.open;
+end;
+
+procedure TfWorkCurriculum.sbDisciplineDeleteClick(Sender: TObject);
+var
+  pMessage: PChar;
+  i:TTreeNode;
+begin
+ProgressBar1.position:=0;
+label6.caption:='Подготовка';
+Panel3.visible:=true;
+  pMessage := pChar('Удалить дисциплину "'+DM.adodsWorkCurrDiscSubjectName.AsString+'",семестр '+DM.adodsWorkCurrDiscSemester.AsString+'?');
+  if(MessageBox(handle, pMessage, 'Внимание!', MB_YESNO)=IDYES)
+  then
+  begin
+       DM.ADOCLogWorKCurDisc.Parameters[1].Value :=DM.adodsSecurityGetRightsid.asinteger;
+          DM.ADOCLogWorKCurDisc.Parameters[2].Value :=dm.adodsWorkCurrDiscSemester.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[3].Value :=dm.adodsWorkCurrDiscIDSubject.AsInteger ;
+          DM.ADOCLogWorKCurDisc.Parameters[4].Value :=dm.adodsWorkCurrDiscHourLecture.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[5].Value :=dm.adodsWorkCurrDiscHourSeminar.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[6].Value :=dm.adodsWorkCurrDiscHourPractice.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[7].Value :=dm.adodsWorkCurrDiscHourSmallGroup.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[8].Value :=dm.adodsWorkCurrDiscHourIndividual.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[9].Value :=dm.adodsWorkCurrDiscHourSelfWork.AsInteger;
+          DM.ADOCLogWorKCurDisc.Parameters[10].Value :=dm.adodsWorkCurrDiscControlTest.AsBoolean;
+          DM.ADOCLogWorKCurDisc.Parameters[11].Value :=dm.adodsWorkCurrDiscControlExamination.AsBoolean;
+          DM.ADOCLogWorKCurDisc.Parameters[12].Value :=dm.adodsWorkCurrDiscControlCourseWork.AsBoolean;
+          DM.ADOCLogWorKCurDisc.Parameters[13].Value :=dm.adodsWorkCurrDiscDateChange.AsDateTime;
+          DM.ADOCLogWorKCurDisc.Parameters[14].Value :=1;
+          DM.ADOCLogWorKCurDisc.Parameters[15].Value :=dm.adodsWorkCurrDiscID.AsInteger;
+         dm.ADOCLogWorKCurDisc.Parameters[16].Value :=DM.adodsWorkCurriculumid.AsInteger;
+                dm.ADOCLogWorKCurDisc.Execute;
+                label6.caption:='Запись логов';
+                ProgressBar1.Position:=ProgressBar1.Position+10;
+                sleep(1000);
+                ProgressBar1.Position:=ProgressBar1.Position+10;
+    DM.ADOSQLExecutor.CommandText := 'delete from WorkCurriculumDiscipline where id='+dm.adodsWorkCurrDiscID.AsString;
+      DM.ADOSQLExecutor.Execute;
+       label6.caption:='Удаление';
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+      sleep(1000);
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+      dm.adodsWorkCurrDisc.Close;
+      dm.adodsWorkCurrDisc.open;
+       label6.caption:='Перестроение списка';
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+      sleep(1000);
+      ProgressBar1.Position:=ProgressBar1.Position+10;
+  dm.ADODUpdSessionOld.close;
+ dm.ADODUpdSessionOld.Parameters[1].Value:=dm.adodsWorkCurriculumidGroup.AsInteger;
+dm.ADODUpdSessionOld.open;
+ label6.caption:='Обновление сессии';
+ProgressBar1.Position:=ProgressBar1.Position+10;
+sleep(2000);
+ProgressBar1.Position:=ProgressBar1.Position+30;
+i:=fmain.TTVmain.Selected.GetNext;
+while i.Level>2 do
+begin
+dm.ADODMarks.close;
+     dm.ADODMarks.Parameters[1].Value:=i.StateIndex;
+     dm.ADODMarks.open;
+ i.ImageIndex:=dm.ADodmarks.Fields.Fields[0].AsInteger;
+ i.SelectedIndex:=dm.ADodmarks.Fields.Fields[0].AsInteger;
+ i:=i.GetNext;
+end;
+  end;
+  Panel3.visible:=false;;
+end;
+
+procedure TfWorkCurriculum.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  DM.adodsWorkCurrDisc.CancelBatch();
+end;
+
+procedure TfWorkCurriculum.FormCreate(Sender: TObject);
+begin
+  cgControlFormSelect.Checks[0].InitState(cbChecked);
+  cgControlFormSelect.Checks[1].InitState(cbChecked);
+  cgControlFormSelect.Checks[2].InitState(cbChecked);
+end;
+
+procedure TfWorkCurriculum.N10Click(Sender: TObject);
+begin
+SpeedButton4.Click;
+end;
+
+procedure TfWorkCurriculum.N1Click(Sender: TObject);
+begin
+SpeedButton3.Click;
+end;
+
+procedure TfWorkCurriculum.N2Click(Sender: TObject);
+begin
+SpeedButton2.Click;
+end;
+
+procedure TfWorkCurriculum.N3Click(Sender: TObject);
+begin
+SpeedButton6.Click;
+end;
+
+procedure TfWorkCurriculum.N5Click(Sender: TObject);
+begin
+SpeedButton8.Click;
+end;
+
+procedure TfWorkCurriculum.N6Click(Sender: TObject);
+begin
+SpeedButton1.Click;
+end;
+
+procedure TfWorkCurriculum.N7Click(Sender: TObject);
+begin
+sbDisciplineAdd.Click;
+end;
+
+procedure TfWorkCurriculum.N9Click(Sender: TObject);
+begin
+SpeedButton5.Click;
+end;
+
+procedure TfWorkCurriculum.Panel2MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+Panel5.Visible:=false;
+end;
+
+procedure TfWorkCurriculum.Panel3MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+Panel5.Visible:=false;
+end;
+
+procedure TfWorkCurriculum.rbSemesterRangeClick(Sender: TObject);
+begin
+  cbSemesterSelect.Enabled := False;
+  cbSemesterLeft.Enabled := True;
+  cbSemesterRight.Enabled := True;
+end;
+
+procedure TfWorkCurriculum.rbSemesterSelectClick(Sender: TObject);
+begin
+  cbSemesterSelect.Enabled := True;
+  cbSemesterLeft.Enabled := False;
+  cbSemesterRight.Enabled := False;
+end;
+
+procedure TfWorkCurriculum.rgSemesterSelectChanging(Sender: TObject;
+  NewIndex: Integer; var AllowChange: Boolean);
+begin
+  case(NewIndex)of
+    0: SetFilter(0,0);
+    1: SetFilter(cbSemesterSelect.ItemIndex+1, cbSemesterSelect.ItemIndex+1);
+    2: SetFilter(cbSemesterLeft.ItemIndex+1, cbSemesterRight.ItemIndex+1);
+  end;
+end;
+end.

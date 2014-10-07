@@ -1,0 +1,70 @@
+object fSessionDetails: TfSessionDetails
+  Left = 283
+  Top = 234
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = #1058#1077#1084#1072' '#1082#1091#1088#1089#1086#1074#1086#1081' '#1088#1072#1073#1086#1090#1099
+  ClientHeight = 136
+  ClientWidth = 306
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 306
+    Height = 101
+    Align = alClient
+    TabOrder = 0
+    ExplicitLeft = 136
+    ExplicitTop = 96
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    DesignSize = (
+      306
+      101)
+    object dbmSessionCourseWorkTheme: TDBMemo
+      Left = 8
+      Top = 6
+      Width = 289
+      Height = 89
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      DataField = 'Theme'
+      DataSource = DM.dsSessionDetails
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 101
+    Width = 306
+    Height = 35
+    Align = alBottom
+    TabOrder = 1
+    ExplicitTop = 104
+    ExplicitWidth = 355
+    object sbOK: TSpeedButton
+      Left = 75
+      Top = 6
+      Width = 71
+      Height = 22
+      Caption = #1054#1050
+      OnClick = sbOKClick
+    end
+    object sbCancel: TSpeedButton
+      Left = 160
+      Top = 6
+      Width = 73
+      Height = 22
+      Caption = #1054#1090#1084#1077#1085#1072
+      OnClick = sbCancelClick
+    end
+  end
+end

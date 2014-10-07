@@ -1,0 +1,211 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{9CBE2070-72B8-49A0-8D2D-C32F05D983D0}</ProjectGuid>
+			<ProjectVersion>12.0</ProjectVersion>
+			<MainSource>decanat.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UsePackage>vclx;vcl;vclimg;dbrtl;Rave77VCL;bdertl;rtl;vclactnband;vcldb;vcldbx;vcltouch;xmlrtl;dsnap;dsnapcon;TeeUI;TeeDB;Tee;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_100_140;Intraweb_100_140;VclSmp;vclie;websnap;webdsnap;inetdb;inetdbbde;inetdbxpress;soaprtl;vclribbon;dbexpress;DbxCommonDriver;DataSnapIndy10ServerTransport;DataSnapProviderClient;DbxClientDriver;DataSnapServer;DBXInterBaseDriver;DBXMySQLDriver;dbxcds;DBXFirebirdDriver;DBXSybaseASEDriver;DBXSybaseASADriver;DBXOracleDriver;DBXMSSQLDriver;DBXInformixDriver;DBXDb2Driver;fs14;frx14;fsDB14;frxDB14;fsBDE14;frxBDE14;fsADO14;frxADO14;fsIBX14;frxIBX14;frxDBX14;frxe14;fsTee14;frxTee14;RaizeComponentsVcl;RaizeComponentsVclDb;EhLib140;EhLibDataDrivers140;PKIECtrl14;PKIEDB14</DCC_UsePackage>
+			<DCC_DependencyCheckOutputName>decanat.exe</DCC_DependencyCheckOutputName>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_E>false</DCC_E>
+			<DCC_N>false</DCC_N>
+			<DCC_S>false</DCC_S>
+			<DCC_F>false</DCC_F>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="decanat.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="uMain.pas">
+				<Form>fMain</Form>
+			</DCCReference>
+			<DCCReference Include="uDM.pas">
+				<Form>DM</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="uLoadTreeProgress.pas">
+				<Form>fLoadTreeProgress</Form>
+			</DCCReference>
+			<DCCReference Include="uAddStudent.pas">
+				<Form>fAddStudent</Form>
+			</DCCReference>
+			<DCCReference Include="uDMfromUPlan.pas">
+				<Form>fDMfromUplan</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="uResizePhoto.pas">
+				<Form>fResizePhoto</Form>
+			</DCCReference>
+			<DCCReference Include="uDirectory.pas">
+				<Form>fDirectory</Form>
+			</DCCReference>
+			<DCCReference Include="uWorkCurriculum.pas">
+				<Form>fWorkCurriculum</Form>
+			</DCCReference>
+			<DCCReference Include="uLogin.pas">
+				<Form>fLogin</Form>
+			</DCCReference>
+			<DCCReference Include="uSession.pas">
+				<Form>fSession</Form>
+			</DCCReference>
+			<DCCReference Include="uManageSecurity.pas">
+				<Form>fManageSecurity</Form>
+			</DCCReference>
+			<DCCReference Include="uAddSecurityVisibleGroups.pas">
+				<Form>fAddSecurityVisibleGroups</Form>
+			</DCCReference>
+			<DCCReference Include="uInstituteOfHigherEducation.pas">
+				<Form>fInstituteOfHigherEducation</Form>
+			</DCCReference>
+			<DCCReference Include="uSessionDetails.pas">
+				<Form>fSessionDetails</Form>
+			</DCCReference>
+			<DCCReference Include="uDMreports.pas">
+				<Form>DMreports</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="uAnketaInost.pas">
+				<Form>fAnketaInost</Form>
+			</DCCReference>
+			<DCCReference Include="uAddErorWCD.pas">
+				<Form>FAddErrorWCD</Form>
+			</DCCReference>
+			<DCCReference Include="Perevod.pas">
+				<Form>fpikazadd</Form>
+			</DCCReference>
+			<DCCReference Include="PerevStud.pas">
+				<Form>Form2</Form>
+			</DCCReference>
+			<DCCReference Include="ViborStudent.pas">
+				<Form>fviborstudente</Form>
+			</DCCReference>
+			<DCCReference Include="AddOrder.pas">
+				<Form>fcreateorder</Form>
+			</DCCReference>
+			<DCCReference Include="uperstudentgroup.pas">
+				<Form>fperstudentgroup</Form>
+			</DCCReference>
+			<DCCReference Include="uSearch.pas">
+				<Form>Search</Form>
+			</DCCReference>
+			<DCCReference Include="Uinfo.pas">
+				<Form>fInformation</Form>
+			</DCCReference>
+			<DCCReference Include="ueditworcdisc.pas">
+				<Form>feditworcdisc</Form>
+			</DCCReference>
+			<DCCReference Include="OldNames.pas">
+				<Form>oldname</Form>
+			</DCCReference>
+			<DCCReference Include="SessionDates.pas">
+				<Form>SessionDate</Form>
+			</DCCReference>
+			<DCCReference Include="UAnketa.pas">
+				<Form>FAnketa</Form>
+			</DCCReference>
+			<DCCReference Include="load.pas">
+				<Form>Loading</Form>
+			</DCCReference>
+			<DCCReference Include="ExportDiplom.pas">
+				<Form>FExportDiplom</Form>
+			</DCCReference>
+			<DCCReference Include="Support.pas">
+				<Form>ProductSupport</Form>
+			</DCCReference>
+			<DCCReference Include="UVedInost.pas">
+				<Form>fUvedInosr</Form>
+			</DCCReference>
+			<DCCReference Include="Unit1.pas">
+				<Form>Form1</Form>
+			</DCCReference>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">decanat.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

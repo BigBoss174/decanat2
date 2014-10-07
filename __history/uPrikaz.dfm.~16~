@@ -1,0 +1,184 @@
+object fPrikaz: TfPrikaz
+  Left = 0
+  Top = 0
+  Caption = #1055#1088#1080#1082#1072#1079#1099
+  ClientHeight = 603
+  ClientWidth = 748
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 748
+    Height = 603
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'TabSheet1'
+      object Label3: TLabel
+        Left = 3
+        Top = 74
+        Width = 44
+        Height = 13
+        Caption = #1057#1090#1091#1076#1077#1085#1090
+      end
+      object Label2: TLabel
+        Left = 3
+        Top = 10
+        Width = 56
+        Height = 13
+        Caption = #1060#1072#1082#1091#1083#1100#1090#1077#1090
+      end
+      object Label4: TLabel
+        Left = 218
+        Top = 10
+        Width = 36
+        Height = 13
+        Caption = #1043#1088#1091#1087#1087#1072
+      end
+      object DBGridEh1: TDBGridEh
+        Left = 3
+        Top = 93
+        Width = 358
+        Height = 268
+        DataGrouping.GroupLevels = <>
+        DataSource = DM.DSStudentList
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = []
+        ImeMode = imDisable
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'ID'
+            Footers = <>
+            Visible = False
+          end
+          item
+            Checkboxes = False
+            EditButtons = <>
+            FieldName = 'IDGroup'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'Kurs'
+            Footers = <>
+          end
+          item
+            EditButtons = <>
+            FieldName = 'NameS'
+            Footers = <>
+            Width = 149
+          end
+          item
+            EditButtons = <>
+            FieldName = 'NameF'
+            Footers = <>
+            Visible = False
+            Width = 145
+          end
+          item
+            EditButtons = <>
+            FieldName = 'NameI'
+            Footers = <>
+            Visible = False
+            Width = 118
+          end
+          item
+            EditButtons = <>
+            FieldName = 'NameO'
+            Footers = <>
+            Visible = False
+            Width = 86
+          end
+          item
+            EditButtons = <>
+            FieldName = 'EducationForm'
+            Footers = <>
+            Width = 114
+          end
+          item
+            EditButtons = <>
+            FieldName = 'GroupName'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'Marks'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'Status'
+            Footers = <>
+            Visible = False
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DateOfExpiry'
+            Footers = <>
+            Visible = False
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object DBLPGrouplist: TDBLookupComboBox
+        Left = 218
+        Top = 29
+        Width = 143
+        Height = 21
+        DropDownRows = 22
+        KeyField = 'ID'
+        ListField = 'GroupName'
+        ListSource = DM.DSGroups
+        TabOrder = 1
+        OnClick = DBLPGrouplistClick
+      end
+      object Button1: TButton
+        Left = 286
+        Top = 367
+        Width = 75
+        Height = 25
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+        TabOrder = 2
+      end
+      object TDBLCFaculties: TDBLookupComboBox
+        Left = 3
+        Top = 29
+        Width = 193
+        Height = 21
+        DropDownRows = 22
+        KeyField = 'ID'
+        ListField = 'FN'
+        ListSource = DM.DSFaculties
+        TabOrder = 3
+        OnCloseUp = TDBLCFacultiesCloseUp
+      end
+    end
+  end
+end

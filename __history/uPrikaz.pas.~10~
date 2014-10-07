@@ -1,0 +1,75 @@
+unit uPrikaz;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, ExtCtrls, ComCtrls, RzTreeVw, Grids, DBGrids,
+  dblookup, DBGridEhGrouping, GridsEh, DBGridEh;
+
+type
+  TfPrikaz = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Button1: TButton;
+    DBLPGrouplist: TDBLookupComboBox;
+    TDBLCFaculties: TDBLookupComboBox;
+    DBGridEh1: TDBGridEh;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure DBLPGrouplistClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TDBLCFacultiesCloseUp(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fPrikaz: TfPrikaz;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+procedure TfPrikaz.Button1Click(Sender: TObject);
+begin
+memo1.Lines.Add(dm.ADODSStudentListNameS.AsString);
+end;
+
+procedure TfPrikaz.DBLPGrouplistClick(Sender: TObject);
+begin
+DM.ADODSStudentList.Close;
+  DM.ADODSStudentList.Parameters[0].Value := DM.ADODSFacultiesID.AsInteger;
+  DM.ADODSStudentList.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSStudentList.Open;
+  DM.ADODSStudentList.Sort := '';
+  DM.ADODSStudentList.Filter := 'IDGroup='+inttostr(dblpgrouplist.KeyValue);
+
+end;
+
+procedure TfPrikaz.FormCreate(Sender: TObject);
+begin
+dbgrideh1.Columns[2].title.caption:='Курс';
+dbgrideh1.Columns[6].title.caption:='Ф.И.О';
+dbgrideh1.Columns[7].title.caption:='Курс';
+end;
+
+procedure TfPrikaz.TDBLCFacultiesCloseUp(Sender: TObject);
+begin
+ DM.ADODSGroups.Close;
+  DM.ADODSGroups.Parameters[0].Value := DM.ADODSFacultiesID.AsInteger;
+  DM.ADODSGroups.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSGroups.Open;
+ DM.ADODSGroups.Filter:='IDFaculty='+inttostr(tdblcfaculties.KeyValue)
+end;
+
+end.

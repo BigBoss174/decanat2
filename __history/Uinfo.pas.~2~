@@ -1,0 +1,32 @@
+unit Uinfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls;
+
+type
+  TfInformation = class(TForm)
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fInformation: TfInformation;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfInformation.SpeedButton1Click(Sender: TObject);
+begin
+fInformation.Close;
+end;
+
+end.

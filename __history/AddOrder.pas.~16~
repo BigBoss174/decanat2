@@ -1,0 +1,58 @@
+unit AddOrder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrls, DBGridEhGrouping, GridsEh, DBGridEh,
+  DBCtrlsEh, DBLookupEh, ComCtrls;
+
+type
+  TForm4 = class(TForm)
+    Button1: TButton;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker3: TDateTimePicker;
+    Edit1: TEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form4: TForm4;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+procedure TForm4.Button1Click(Sender: TObject);
+begin
+        showmessage(   DBLookupComboboxEh2.KeyValue);
+
+      DM.ADOCommand1.Parameters[0].Value := DBLookupComboboxEh2.KeyValue ;
+      DM.ADOCommand1.Parameters[1].Value := edit1.Text;
+      DM.ADOCommand1.Parameters[2].Value := DateTimePicker1.Date;
+      DM.ADOCommand1.Parameters[3].Value :=DateTimePicker2.Date;
+      DM.ADOCommand1.Parameters[4].Value := DateTimePicker3.Date;
+      DM.ADOCommand1.Parameters[5].Value := DBLookupComboboxEh2.KeyValue;
+      DM.ADOCommand1.Execute;
+
+dm.ADODSStudentOrder.Close;
+dm.ADODSStudentOrder.Open;
+ form4.Close;
+end;
+
+end.

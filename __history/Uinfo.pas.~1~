@@ -1,0 +1,24 @@
+unit Uinfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TInformation = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Information: TInformation;
+
+implementation
+
+{$R *.dfm}
+
+end.

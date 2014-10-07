@@ -1,0 +1,76 @@
+unit uAnketaInost;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, ExtCtrls, ComCtrls, RzTreeVw, Grids, DBGrids,
+  dblookup, DBGridEhGrouping, GridsEh, DBGridEh, Buttons, DBCtrlsEh, Mask,
+  DBLookupEh;
+
+type
+  TfPrikaz = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    procedure DBLPGrouplistClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TDBLCFacultiesCloseUp(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fPrikaz: TfPrikaz;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+procedure TfPrikaz.DBLPGrouplistClick(Sender: TObject);
+begin
+DM.ADODSStudentList.Close;
+  DM.ADODSStudentList.Parameters[0].Value := DM.ADODSFacultiesID.AsInteger;
+  DM.ADODSStudentList.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSStudentList.Open;
+  DM.ADODSStudentList.Sort := '';
+  DM.ADODSStudentList.Filter := 'IDGroup='+inttostr(dblpgrouplist.KeyValue);
+
+end;
+
+procedure TfPrikaz.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ DM.ADODSStudentList.Close;
+end;
+
+procedure TfPrikaz.FormCreate(Sender: TObject);
+begin
+dbgrideh1.Columns[2].title.caption:='Курс';
+dbgrideh1.Columns[6].title.caption:='Ф.И.О';
+dbgrideh1.Columns[7].title.caption:='Курс';
+end;
+
+procedure TfPrikaz.TDBLCFacultiesCloseUp(Sender: TObject);
+begin
+ DM.ADODSGroups.Close;
+  DM.ADODSGroups.Parameters[0].Value := DM.ADODSFacultiesID.AsInteger;
+  DM.ADODSGroups.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSGroups.Open;
+ DM.ADODSGroups.Filter:='IDFaculty='+inttostr(tdblcfaculties.KeyValue)
+end;
+
+end.

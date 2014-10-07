@@ -1,0 +1,106 @@
+unit ExportDiplom;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DB, ADODB, DBGridEh, Mask, DBCtrlsEh, DBLookupEh,
+  Buttons,DateUtils, ComCtrls;
+
+type
+  TFExportDiplom = class(TForm)
+    ADOCDiplom: TADOConnection;
+    ADODSFacDiplom: TADODataSet;
+    DSFacDiplom: TDataSource;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Button1: TButton;
+    Panel2: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    ADODSExport: TADODataSet;
+    s: TDataSource;
+    Edit2: TEdit;
+    RadioGroup1: TRadioGroup;
+    Label2: TLabel;
+    Label3: TLabel;
+    ProgressBar1: TProgressBar;
+    Timer1: TTimer;
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FExportDiplom: TFExportDiplom;
+
+implementation
+
+uses uDM, uMain;
+
+{$R *.dfm}
+
+procedure TFExportDiplom.Button1Click(Sender: TObject);
+var i:string;
+begin
+   ADODSFacDiplom.Close;
+   ADODSFacDiplom.Parameters[0].Value:=edit1.Text;
+   ADODSFacDiplom.open;
+     Panel1.Visible:=false;
+      Panel2.Visible:=true;
+      edit2.Text:=inttostr( yearof(date));
+ i:=dm.adodsWorkCurriculumSpecialityCode.AsString;
+ i:=i[Length(i) ] ;
+  case strtoint(i) of
+  2:RadioGroup1.ItemIndex:=1;
+  5:RadioGroup1.ItemIndex:=0;
+  8:RadioGroup1.ItemIndex:=2;
+  end;
+end;
+
+procedure TFExportDiplom.SpeedButton1Click(Sender: TObject);
+begin
+       ADODSExport.Close;
+       ADODSExport.Parameters[1].Value:=DBLookupComboboxEh1.KeyValue;
+       ADODSExport.Parameters[2].Value:=fMain.TTVmain.Selected.StateIndex;
+
+       ADODSExport.Parameters[3].Value:=dm.adodsGroupDataGroupName.AsString+'dec';
+       ADODSExport.Parameters[4].Value:='';
+       ADODSExport.Parameters[5].Value:=copy(fmain.DBESpecialityCode.EditText,0,6)+fmain.DBESpeciality.EditText;
+       ADODSExport.Parameters[6].Value:= fmain.DBESpecialization.EditText;
+       ADODSExport.Parameters[7].Value:=edit2.Text;
+       case RadioGroup1.ItemIndex of
+        0: ADODSExport.Parameters[8].Value:=1;
+        1: ADODSExport.Parameters[8].Value:=1;
+        2:ADODSExport.Parameters[8].Value:=5;
+       end;
+
+       ADODSExport.open;
+                 ProgressBar1.Position:=0;
+        ProgressBar1.Visible:=true;
+        Timer1.Enabled:=true;
+
+end;
+
+procedure TFExportDiplom.Timer1Timer(Sender: TObject);
+begin
+ ProgressBar1.Position:=ProgressBar1.Position+1;
+   if  ProgressBar1.Position=100 then
+   begin
+    timer1.Enabled:=false;
+    ProgressBar1.Visible:=false;
+  ShowMessage('Завершено');
+        Panel2.Visible:=false;
+        Panel1.Visible:=true;
+        FExportDiplom.Close;
+
+
+   end;
+end;
+
+end.

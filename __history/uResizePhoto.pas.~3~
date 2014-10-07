@@ -1,0 +1,164 @@
+unit uResizePhoto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, ieview, imageenview, imageen, ieopensavedlg,
+  hyiedefs, ImageEnProc, DB, ADODB, hvideocap;
+   {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TfResizePhoto = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Image1: TImageEn;
+    ImagePreview: TImageEn;
+    ImageEnVideoCap1: TImageEnVideoCap;
+    procedure FormShow(Sender: TObject);
+    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fResizePhoto: TfResizePhoto;
+  DRect : TRect;
+  draw : boolean;
+  x0, y0, xb, yb, xe, ye, xm, ym : integer;
+
+implementation
+
+uses
+  uDM;
+
+{$R *.dfm}
+
+procedure TfResizePhoto.Button1Click(Sender: TObject);
+var
+  tmp : TMemoryStream;
+  pht : TADOBlobStream;
+begin
+  Image1.DeSelect;
+  Close;
+
+  tmp := TMemoryStream.Create;
+
+  ImagePreview.Proc.Resample(113, 151, rfLanczos3);
+  ImagePreview.IO.Params.ResetInfo;
+  ImagePreview.IO.SaveToStreamJpeg(tmp);
+
+  pht := TADOBlobStream.Create(DM.ADODSStudentDataPhoto, bmWrite);
+  pht.LoadFromStream(tmp);
+
+  DM.ADODSStudentData.Post;
+  DM.ADODSStudentData.Close;
+  DM.ADODSStudentData.Open;
+  DM.ADODSStudentData.Edit;
+
+  pht.Destroy;
+  tmp.Destroy;
+end;
+
+procedure TfResizePhoto.Button2Click(Sender: TObject);
+begin
+  image1.DeSelect;
+  image1.Clear;
+  imagepreview.Clear;
+  close;
+end;
+
+procedure TfResizePhoto.FormShow(Sender: TObject);
+begin
+  Draw := false;
+  Image1.SelectionAspectRatio := 4/3;
+  Image1.DeSelect;
+end;
+
+procedure TfResizePhoto.Image1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  draw:=true;
+  x0 := x;
+  y0 := y;
+  xb := x0;
+  yb := y0;
+  xe := x0;
+  ye := y0;
+  Image1.Select(xb,yb,xe,ye);
+end;
+
+procedure TfResizePhoto.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var
+  SelectedRatio : real;
+begin
+  if draw
+  then
+      begin
+      if(x<x0)
+      then
+          begin
+          xb := x;
+          xe := x0;
+          end
+      else
+          begin
+          xb := x0;
+          xe := x;
+          end;
+
+      if(y<y0)
+      then
+          begin
+          yb := y;
+          ye := y0;
+          end
+      else
+          begin
+          yb := y0;
+          ye := y;
+          end;
+
+      if(ye<>yb)then SelectedRatio := (xe-xb)/(ye-yb);
+      if(SelectedRatio<0.75)
+      then
+          if(x<x0)
+          then xb := x0 - round((ye-yb)*0.75)
+          else xe := x0 + round((ye-yb)*0.75)
+      else
+          if(y<y0)
+          then yb := y0 - round((xe-xb)*4/3)
+          else ye := y0 + round((xe-xb)*4/3);
+
+      Image1.Select(xb,yb,xe,ye);
+      Image1.CopySelectionToBitmap(ImagePreview.Bitmap);
+      ImagePreview.Repaint;
+      end;
+end;
+
+procedure TfResizePhoto.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  draw:=false;
+  if(xb=xe)and(yb=ye)then image1.DeSelect;
+  Image1.Select(xb,yb,xe,ye);
+  Image1.CopySelectionToBitmap(ImagePreview.Bitmap);
+  ImagePreview.Repaint;
+end;
+
+end.

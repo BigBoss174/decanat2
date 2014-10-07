@@ -1,0 +1,48 @@
+unit load;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, pngimage, ExtCtrls, jpeg;
+   {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TLoading = class(TForm)
+    Image1: TImage;
+    Panel1: TPanel;
+    Image2: TImage;
+    Label1: TLabel;
+    Panel2: TPanel;
+    Image3: TImage;
+    Label2: TLabel;
+    Timer1: TTimer;
+    procedure Timer1Timer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Loading: TLoading;
+
+implementation
+
+{$R *.dfm}
+
+procedure TLoading.FormCreate(Sender: TObject);
+begin
+timer1.enabled:=true;
+end;
+
+procedure TLoading.Timer1Timer(Sender: TObject);
+begin
+loading.close;
+end;
+
+end.

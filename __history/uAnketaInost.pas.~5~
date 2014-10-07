@@ -1,0 +1,28 @@
+unit uAnketaInost;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, ExtCtrls, ComCtrls, RzTreeVw, Grids, DBGrids,
+  dblookup, DBGridEhGrouping, GridsEh, DBGridEh, Buttons, DBCtrlsEh, Mask,
+  DBLookupEh;
+
+type
+  TfAnketaInost = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fAnketaInost: TfAnketaInost;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+end.

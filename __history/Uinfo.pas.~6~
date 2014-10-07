@@ -1,0 +1,37 @@
+unit Uinfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls, pngimage, ExtCtrls, jpeg;
+  {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TfInformation = class(TForm)
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    Image1: TImage;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fInformation: TfInformation;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfInformation.SpeedButton1Click(Sender: TObject);
+begin
+fInformation.Close;
+end;
+
+end.

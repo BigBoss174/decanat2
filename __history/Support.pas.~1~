@@ -1,0 +1,31 @@
+unit Support;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, DB, ADODB;
+
+type
+  TProductSupport = class(TForm)
+    AdodsSupport: TADODataSet;
+    DSSupport: TDataSource;
+    Memo1: TMemo;
+    Button1: TButton;
+    DBGridEh1: TDBGridEh;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ProductSupport: TProductSupport;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+end.

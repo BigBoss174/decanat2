@@ -1,0 +1,63 @@
+program decanat;
+
+uses
+  Forms,
+  Windows,
+  SysUtils,
+  Dialogs,
+  uMain in 'uMain.pas' {fMain},
+  uDM in 'uDM.pas' {DM: TDataModule},
+  uLoadTreeProgress in 'uLoadTreeProgress.pas' {fLoadTreeProgress},
+  uAddStudent in 'uAddStudent.pas' {fAddStudent},
+  uDMfromUPlan in 'uDMfromUPlan.pas' {fDMfromUplan: TDataModule},
+  uResizePhoto in 'uResizePhoto.pas' {fResizePhoto},
+  uDirectory in 'uDirectory.pas' {fDirectory},
+  uWorkCurriculum in 'uWorkCurriculum.pas' {fWorkCurriculum},
+  uLogin in 'uLogin.pas' {fLogin},
+  uSession in 'uSession.pas' {fSession},
+  uManageSecurity in 'uManageSecurity.pas' {fManageSecurity},
+  uAddSecurityVisibleGroups in 'uAddSecurityVisibleGroups.pas' {fAddSecurityVisibleGroups},
+  uInstituteOfHigherEducation in 'uInstituteOfHigherEducation.pas' {fInstituteOfHigherEducation},
+  uSessionDetails in 'uSessionDetails.pas' {fSessionDetails},
+  uDMreports in 'uDMreports.pas' {DMreports: TDataModule},
+  uAnketaInost in 'uAnketaInost.pas' {fAnketaInost},
+  uAddErorWCD in 'uAddErorWCD.pas' {FAddErrorWCD},
+  Perevod in 'Perevod.pas' {fpikazadd},
+  PerevStud in 'PerevStud.pas' {Form2},
+  ViborStudent in 'ViborStudent.pas' {fviborstudente},
+  AddOrder in 'AddOrder.pas' {fcreateorder},
+  uperstudentgroup in 'uperstudentgroup.pas' {fperstudentgroup},
+  uSearch in 'uSearch.pas' {Search},
+  Uinfo in 'Uinfo.pas' {fInformation},
+  ueditworcdisc in 'ueditworcdisc.pas' {feditworcdisc},
+  OldNames in 'OldNames.pas' {oldname},
+  SessionDates in 'SessionDates.pas' {SessionDate},
+  UAnketa in 'UAnketa.pas' {FAnketa},
+  load in 'load.pas' {Loading},
+  ExportDiplom in 'ExportDiplom.pas' {FExportDiplom},
+  Support in 'Support.pas' {ProductSupport},
+  UVedInost in 'UVedInost.pas' {fUvedInosr},
+  Unit1 in 'Unit1.pas' {Form1};
+
+{$R *.res}
+begin
+
+if FindWindow('TfMain', 'fMain') <> 0 then
+  begin
+    ShowMessage('Программа уже запущена');
+    SetForegroundWindow(FindWindow('TfLogin', 'fLogin'))
+  end
+else
+  begin
+    Application.Initialize;
+      Application.MainFormOnTaskBar:=true;
+    Application.Title := 'Деканат 2';
+
+    Application.HelpFile := 'C:\Users\azamat\Desktop\Руководство пользователя.chm';
+  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TLoading, Loading);
+  Application.CreateForm(TfLogin, fLogin);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+  end
+end.

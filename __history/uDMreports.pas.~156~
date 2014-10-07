@@ -1,0 +1,483 @@
+unit uDMreports;
+
+interface
+
+uses
+  SysUtils, Classes, frxClass, frxDBSet, DB, ADODB, frxCross, frxChBox,
+  frxExportCSV, frxExportXLS, frxExportRTF,windows, xmldom, Xmlxform,
+  frxExportXML, frxBarcode;
+
+type
+  TDMreports = class(TDataModule)
+    frxrMarkSheetExam: TfrxReport;
+    adodsMarkSheetExam: TADODataSet;
+    frxDBDmarkSheetExam: TfrxDBDataset;
+    adodsMarkSheetExamGroupName: TWideStringField;
+    adodsMarkSheetExamnm: TStringField;
+    adodsMarkSheetExamsemester: TWordField;
+    adodsMarkSheetExamidSubject: TIntegerField;
+    adodsMarkSheetExamSessionAccess: TStringField;
+    adodsMarkSheetExamSubjectName: TStringField;
+    adodsStudentListGet: TADODataSet;
+    frxrStudentListGet: TfrxReport;
+    frxDBDStudentListGet: TfrxDBDataset;
+    adodsMarkSheetExamRecordBookNumber: TStringField;
+    ADODataSet1: TADODataSet;
+    frxDBDataset1: TfrxDBDataset;
+    frxReport1: TfrxReport;
+    ADODSHospital: TADODataSet;
+    frxDBDhospital: TfrxDBDataset;
+    frxRhospital: TfrxReport;
+    ADODKadri: TADODataSet;
+    frxDBKadri: TfrxDBDataset;
+    frxRKadri: TfrxReport;
+    ADODSUslovObuch: TADODataSet;
+    frxDBUslovObuch: TfrxDBDataset;
+    frxRUslovObuch: TfrxReport;
+    frxRObichListStud: TfrxReport;
+    frxRStudentExamMon: TfrxReport;
+    frxDBDStudentExamMon: TfrxDBDataset;
+    ADODStudentExamMon: TADODataSet;
+    ADODSlowStudent: TADODataSet;
+    frxDBDSlowStudent: TfrxDBDataset;
+    frxRSlowStudent: TfrxReport;
+    ADODStudentExamMonNameS: TWideStringField;
+    ADODStudentExamMonSubjectName: TWideStringField;
+    ADODStudentExamMonresult: TStringField;
+    frxRStudentSpravka: TfrxReport;
+    ADODStudentSpravka: TADODataSet;
+    frxDBStudentSpravka: TfrxDBDataset;
+    ADODSrokObuch: TADODataSet;
+    ADOCUPlan: TADOConnection;
+    frxDBSrokObuch: TfrxDBDataset;
+    ADODSSesionResult: TADODataSet;
+    frxDBSesionresult: TfrxDBDataset;
+    frxSesionResult: TfrxReport;
+    ADODSPersonalCard: TADODataSet;
+    frxDBDPersonalCard: TfrxDBDataset;
+    frxPersonalCard: TfrxReport;
+    ADODS3NKKolStud: TADODataSet;
+    frxDBD3NKKolStud: TfrxDBDataset;
+    frx3NKKolStud: TfrxReport;
+    ADODS3NKUslObuch: TADODataSet;
+    frxDBDS3NKUslObuch: TfrxDBDataset;
+    frx3NKUslObuch: TfrxReport;
+    ADODSBenefit: TADODataSet;
+    frxDBDBenefit: TfrxDBDataset;
+    frxRBenefit: TfrxReport;
+    frxS3NKSShip: TfrxDBDataset;
+    ADODS3NKSShip: TADODataSet;
+    frx3NKYear: TfrxReport;
+    frxDBD3NKYear: TfrxDBDataset;
+    ADODS3NKYear: TADODataSet;
+    frx3NKSShip: TfrxReport;
+    ADODSLogWorkCurrDisc: TADODataSet;
+    frxDSLogWorkCurrDisc: TfrxDBDataset;
+    frxLogWorkCurrDisc: TfrxReport;
+    frxCheckBoxObject1: TfrxCheckBoxObject;
+    frxRTFExport1: TfrxRTFExport;
+    frxXLSExport1: TfrxXLSExport;
+    ADODSNoSinhron: TADODataSet;
+    frxRNoSinhron: TfrxReport;
+    frxDBDNoSinhron: TfrxDBDataset;
+    ADODSSessionResultSpecNap: TADODataSet;
+    frxDBDSessionResultSpecNap: TfrxDBDataset;
+    frxSessionResultSpecNap: TfrxReport;
+    ADODSRatingforbudget: TADODataSet;
+    frxRatingforbudget: TfrxDBDataset;
+    frxRRatingforbudget: TfrxReport;
+    ADODsContingentForVUZofKurs: TADODataSet;
+    frxDBContingentForVUZofKurs: TfrxDBDataset;
+    frxContingentForVUZofKurs: TfrxReport;
+    ADODSContingForFaculty: TADODataSet;
+    frxContingForFaculty: TfrxDBDataset;
+    frxRContingForFaculty: TfrxReport;
+    ADODSRaitingDopStip: TADODataSet;
+    frxDBDRaitingDopStip: TfrxDBDataset;
+    frxRRaitingDopStip: TfrxReport;
+    ADODSAtestVedom: TADODataSet;
+    frxDBDAtestVedom: TfrxDBDataset;
+    frxRAtestVedom: TfrxReport;
+    frxRVUSResultSessionFak: TfrxReport;
+    frxRVUZSessionResultSpec: TfrxReport;
+    ADODSInostr: TADODataSet;
+    frxDBDSInostr: TfrxDBDataset;
+    frxRInostr: TfrxReport;
+    ADODSContKursbySpec: TADODataSet;
+    frxDBDContKursbySpec: TfrxDBDataset;
+    frxRContKursbySpec: TfrxReport;
+    frxVUZKursSpecNapResulrSession: TfrxReport;
+    ADODSSEXVUZ: TADODataSet;
+    frxDBDSEXVUZ: TfrxDBDataset;
+    frxRSEXVUZ: TfrxReport;
+    frxRStipCom: TfrxReport;
+    ADODSStipCom: TADODataSet;
+    frxDBDStipCom: TfrxDBDataset;
+    frxRReg: TfrxReport;
+    ADODSReg: TADODataSet;
+    frxDBDSReg: TfrxDBDataset;
+    frxRBudget: TfrxReport;
+    ADODBudget: TADODataSet;
+    frxDBBudget: TfrxDBDataset;
+    frxRVedomOplata: TfrxReport;
+    frxRSexVuzKurs: TfrxReport;
+    frxDBDSexVuzKurs: TfrxDBDataset;
+    ADODSSexVuzKurs: TADODataSet;
+    frxRVipusk: TfrxReport;
+    frxDBDVipusk: TfrxDBDataset;
+    ADODSVipusk: TADODataSet;
+    frxRstudentSpravkaOK: TfrxReport;
+    frxROtlichFac: TfrxReport;
+    frxDBOtlichFac: TfrxDBDataset;
+    ADODSOtlichFac: TADODataSet;
+    adodsMarkSheetExamkurs: TWordField;
+    adodsMarkSheetExamFacultyName: TWideStringField;
+    frxrMarkSheetExam2: TfrxReport;
+    frxDBSessionResultComers: TfrxDBDataset;
+    ADODSSessionResultComers: TADODataSet;
+    frxRSessionResultComers: TfrxReport;
+    frxDBDSResultDisciplinOfGroup: TfrxDBDataset;
+    ADODSResultDisciplinOfGroup: TADODataSet;
+    frxRResultDisciplinOfGroup: TfrxReport;
+    ADODSResultDisciplinOfGroupResult: TStringField;
+    ADODSResultDisciplinOfGroupControlForm: TStringField;
+    ADODSResultDisciplinOfGroupSemester: TWordField;
+    ADODSResultDisciplinOfGroupHourSum: TSmallintField;
+    ADODSResultDisciplinOfGroupSubjectName: TWideStringField;
+    ADODSResultDisciplinOfGroupNameF: TWideStringField;
+    ADODSResultDisciplinOfGroupNameI: TWideStringField;
+    ADODSResultDisciplinOfGroupNameO: TWideStringField;
+    ADODSResultDisciplinOfGroupIdSubject: TIntegerField;
+    frxDBDResSem: TfrxDBDataset;
+    ADODSResSem: TADODataSet;
+    frxDBRSG: TfrxDBDataset;
+    ADODRSG: TADODataSet;
+    frxDBDUved1: TfrxDBDataset;
+    ADODSUved1: TADODataSet;
+    frxRUved1: TfrxReport;
+    frxDBSlowCathedr: TfrxDBDataset;
+    ADODSSlowCathedr: TADODataSet;
+    frxRSlowCathedr: TfrxReport;
+    frxDBGrafikSamRab: TfrxDBDataset;
+    ADODSGrafikSamRab: TADODataSet;
+    frxRGrafikSamRab: TfrxReport;
+    ADODSPasport: TADODataSet;
+    frxDBPasport: TfrxDBDataset;
+    frxRPasport: TfrxReport;
+    ADODataSet2: TADODataSet;
+    frxDBDataset2: TfrxDBDataset;
+    ADODSWorkAfter: TADODataSet;
+    frxDBDWorkAfter: TfrxDBDataset;
+    frxRWorkAfter: TfrxReport;
+    frxRAtestVedom2: TfrxReport;
+    frxDBDSpravkaOtch: TfrxDBDataset;
+    ADODSSpravkaOtch: TADODataSet;
+    frxRSpravkaOtch: TfrxReport;
+    qqq: TADODataSet;
+    qq: TfrxDBDataset;
+    qqqqq: TfrxReport;
+    frxReport2: TfrxReport;
+    ADOSKCP: TADODataSet;
+    frxDBDKCP1: TfrxDBDataset;
+    frxRKCP1: TfrxReport;
+    ADODSKCPTwo: TADODataSet;
+    frxDBDKCPTwo: TfrxDBDataset;
+    frxRKCPTwo: TfrxReport;
+    ADODSVOPoliclinic: TADODataSet;
+    frxDBDVOPoliclinic: TfrxDBDataset;
+    frxRVOPoliclinic: TfrxReport;
+    ADODSUP: TADODataSet;
+    ADODSRUP: TADODataSet;
+    ADODSRupUP: TADODataSet;
+    frxDBRUP: TfrxDBDataset;
+    frxDBDRupUP: TfrxDBDataset;
+    frxDBDUP: TfrxDBDataset;
+    frxRPRupUP: TfrxReport;
+    ADODBiblioCard: TADODataSet;
+    frxDBBiblioCard: TfrxDBDataset;
+    frxRBiblioCard: TfrxReport;
+    frxBarCodeObject1: TfrxBarCodeObject;
+    ADODSFormulyar: TADODataSet;
+    frxDBDFormulyar: TfrxDBDataset;
+    frxRFormulyar: TfrxReport;
+    frxrMarkSheetExamClear: TfrxReport;
+    frxRAtestVedomClear: TfrxReport;
+    frxrAttestZachet: TfrxReport;
+    ADODSSiroti: TADODataSet;
+    frxDBDSiroti: TfrxDBDataset;
+    frxRPrikazOdegda: TfrxReport;
+    ADODSSirotiFacultyName: TWideStringField;
+    ADODSSirotinamef: TWideStringField;
+    ADODSSirotinamei: TWideStringField;
+    ADODSSirotinameo: TWideStringField;
+    ADODSSirotiGroupName: TWideStringField;
+    ADODSSirotinames: TWideStringField;
+    frxRVedGOS: TfrxReport;
+    ADODSDOHOD: TADODataSet;
+    frxDBDOHOD: TfrxDBDataset;
+    frxRDOHOD: TfrxReport;
+    ADODSDOHOD1: TADODataSet;
+    frxDBDDOHOD1: TfrxDBDataset;
+    ADODSDohodKCP: TADODataSet;
+    frxDBDohodKCP: TfrxDBDataset;
+    frxRDohodKCP: TfrxReport;
+    AdodsOlandUdar: TADODataSet;
+    frxDBDOlandUdar: TfrxDBDataset;
+    frxROlandUdar: TfrxReport;
+    frxRDohodKCPIZO: TfrxReport;
+    frxRDOHODIZO: TfrxReport;
+    frxRKCPTwoIZO: TfrxReport;
+    procedure frxrMarkSheetExamGetValue(const VarName: string;
+      var Value: Variant);
+    procedure frxrMarkSheetExam2GetValue(const VarName: string;
+      var Value: Variant);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMreports: TDMreports;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  uDM, uDMfromUPlan, uMain;
+
+procedure TDMreports.frxrMarkSheetExam2GetValue(const VarName: string;
+  var Value: Variant);
+begin
+if CompareText(VarName, 'ControlFormTitle') = 0
+  then
+  begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '«ј„®“Ќјя';
+
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'Ё «јћ≈Ќј÷»ќЌЌјя';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := '«ј„®“Ќјя';
+
+  end;
+
+  if CompareText(VarName, 'ControlFormTitle2') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄтную';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзаменационную';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := 'зачЄтную';
+
+  end;
+
+
+  if CompareText(VarName, 'courseWork') = 0
+  then
+      begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := '';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := ' (курсова€ работа)';
+
+  end;
+
+  if CompareText(VarName, 'resultType') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value :=  'сдаче зачЄта';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'сдаче экзамена';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защите курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm') = 0
+  then
+     begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄте';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамене';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защите курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm2') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄт';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамен';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защиту курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm3') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄты';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамены';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='зачЄты';
+  end;
+
+  if CompareText(VarName, 'ControlFormResults') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '"зачтено" <u>          </u>,"не зачтено" <u>          </u>';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value :='"отлично" <u>          </u>,"хорошо" <u>          </u>,"удовлетворительно" <u>          </u>,"неудовлетворительно" <u>          </u>';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='"отлично" <u>          </u>,"хорошо" <u>          </u>,"удовлетворительно" <u>          </u>,"неудовлетворительно" <u>          </u>';
+  end;
+
+
+ if CompareText(VarName, 'StudyingForm') = 0
+ then
+      case(DM.ADODSFacultiesDepartment.AsInteger)of
+        1: Value := 'очна€';
+        2: Value := 'заочна€';
+      end;
+
+  if CompareText(VarName, 'DeanInitials') = 0
+  then
+      begin
+      Value := DM.ADODSFacultiesDeanNameS.AsString;
+      end;
+end;
+
+procedure TDMreports.frxrMarkSheetExamGetValue(const VarName: string;
+  var Value: Variant);
+begin
+  if CompareText(VarName, 'ControlFormTitle') = 0
+  then
+  begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '«ј„®“Ќјя';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'Ё «јћ≈Ќј÷»ќЌЌјя';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := '«ј„®“Ќјя';
+
+  end;
+
+  if CompareText(VarName, 'ControlFormTitle2') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄтную';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзаменационную';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := 'зачЄтную';
+
+  end;
+
+
+  if CompareText(VarName, 'courseWork') = 0
+  then
+      begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := '';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value := ' (курсова€ работа)';
+
+  end;
+
+  if CompareText(VarName, 'resultType') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value :=  'сдаче зачЄта';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'сдаче экзамена';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защите курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm') = 0
+  then
+     begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄте';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамене';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защите курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm2') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄт';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамен';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='защиту курсовой работы';
+
+  end;
+
+
+  if CompareText(VarName, 'ControlForm3') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := 'зачЄты';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value := 'экзамены';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='зачЄты';
+  end;
+
+  if CompareText(VarName, 'ControlFormResults') = 0
+  then
+    begin
+       if DM.adodsWorkCurrDiscControlTest.AsBoolean then
+          Value := '"зачтено" <u>          </u>,"не зачтено" <u>          </u>';
+       if DM.adodsWorkCurrDiscControlExamination.AsBoolean then
+          Value :='"отлично" <u>          </u>,"хорошо" <u>          </u>,"удовлетворительно" <u>          </u>,"неудовлетворительно" <u>          </u>';
+       if DM.adodsWorkCurrDiscControlCourseWork.AsBoolean then
+          Value :='"отлично" <u>          </u>,"хорошо" <u>          </u>,"удовлетворительно" <u>          </u>,"неудовлетворительно" <u>          </u>';
+  end;
+
+
+ if CompareText(VarName, 'StudyingForm') = 0
+ then
+      case(DM.ADODSFacultiesDepartment.AsInteger)of
+        1: Value := 'очна€';
+        2: Value := 'заочна€';
+      end;
+
+  if CompareText(VarName, 'DeanInitials') = 0
+  then
+      begin
+      Value := DM.ADODSFacultiesDeanNameS.AsString;
+      end;
+end;
+
+end.

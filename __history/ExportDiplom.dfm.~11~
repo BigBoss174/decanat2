@@ -1,0 +1,278 @@
+object FExportDiplom: TFExportDiplom
+  Left = 448
+  Top = 356
+  BorderStyle = bsSizeToolWin
+  Caption = #1069#1082#1089#1087#1086#1088#1090
+  ClientHeight = 145
+  ClientWidth = 444
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 444
+    Height = 145
+    Align = alClient
+    Color = clSkyBlue
+    ParentBackground = False
+    TabOrder = 0
+    ExplicitWidth = 470
+    ExplicitHeight = 144
+    object Label3: TLabel
+      Left = 113
+      Top = 10
+      Width = 236
+      Height = 13
+      Caption = #1042#1074#1077#1076#1080#1090#1077' '#1074#1072#1096' '#1083#1086#1075#1080#1085' '#1074' '#1087#1088#1086#1075#1088#1072#1084#1084#1077' '#1076#1080#1087#1083#1086#1084
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Edit1: TEdit
+      Left = 113
+      Top = 31
+      Width = 177
+      Height = 21
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 303
+      Top = 29
+      Width = 75
+      Height = 25
+      Caption = 'OK'
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 444
+    Height = 145
+    Align = alClient
+    Color = clSkyBlue
+    ParentBackground = False
+    TabOrder = 1
+    TabStop = True
+    Visible = False
+    ExplicitWidth = 443
+    object Label1: TLabel
+      Left = 32
+      Top = 8
+      Width = 65
+      Height = 13
+      Caption = #1060#1072#1082#1091#1083#1100#1090#1077#1090
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 135
+      Top = 103
+      Width = 185
+      Height = 32
+      Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object Label2: TLabel
+      Left = 32
+      Top = 59
+      Width = 87
+      Height = 13
+      Caption = #1043#1086#1076' '#1086#1082#1086#1085#1095#1072#1085#1080#1103
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Left = 32
+      Top = 27
+      Width = 209
+      Height = 21
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'Name'
+      ListSource = DSFacDiplom
+      TabOrder = 0
+      Visible = True
+    end
+    object Edit2: TEdit
+      Left = 32
+      Top = 76
+      Width = 201
+      Height = 21
+      NumbersOnly = True
+      TabOrder = 1
+    end
+    object RadioGroup1: TRadioGroup
+      Left = 247
+      Top = 6
+      Width = 185
+      Height = 91
+      Caption = #1057#1090#1077#1087#1077#1085#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Items.Strings = (
+        #1057#1087#1077#1094#1080#1072#1083#1080#1089#1090
+        #1041#1072#1082#1072#1083#1072#1074#1088
+        #1052#1072#1075#1080#1089#1090#1088)
+      ParentFont = False
+      TabOrder = 2
+    end
+    object ProgressBar1: TProgressBar
+      Left = 32
+      Top = 103
+      Width = 400
+      Height = 36
+      TabOrder = 3
+      Visible = False
+    end
+  end
+  object ADOCDiplom: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Password=This fish riba;Persist Security Inf' +
+      'o=True;User ID=ProgramsUser;Initial Catalog=Diplom;Data Source=S' +
+      'QL2008R2'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 624
+    Top = 16
+  end
+  object ADODSFacDiplom: TADODataSet
+    Active = True
+    Connection = ADOCDiplom
+    CursorType = ctStatic
+    CommandText = 
+      'select *'#13#10'from Faculty'#13#10'where UserID=(select id'#13#10'from Users'#13#10'whe' +
+      're [LOGIn]=:login)'
+    Parameters = <
+      item
+        Name = 'login'
+        DataType = ftWideString
+        Size = 1
+        Value = '1'
+      end>
+    Prepared = True
+    Left = 624
+    Top = 64
+  end
+  object DSFacDiplom: TDataSource
+    DataSet = ADODSFacDiplom
+    Left = 624
+    Top = 128
+  end
+  object ADODSExport: TADODataSet
+    Connection = DM.ADOCDecanat
+    CursorType = ctStatic
+    CommandText = 'usp_GroupinDiplom;1'
+    CommandType = cmdStoredProc
+    Parameters = <
+      item
+        Name = '@RETURN_VALUE'
+        DataType = ftInteger
+        Direction = pdReturnValue
+        Precision = 10
+        Value = Null
+      end
+      item
+        Name = '@idFaculty'
+        Attributes = [paNullable]
+        DataType = ftInteger
+        Precision = 10
+        Value = Null
+      end
+      item
+        Name = '@idgroup'
+        Attributes = [paNullable]
+        DataType = ftInteger
+        Precision = 10
+        Value = Null
+      end
+      item
+        Name = '@NameGroup'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        Size = 50
+        Value = Null
+      end
+      item
+        Name = '@PeriodObuchen'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        Size = 50
+        Value = Null
+      end
+      item
+        Name = '@Profession'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        Size = 250
+        Value = Null
+      end
+      item
+        Name = '@Speciality'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        Size = 250
+        Value = Null
+      end
+      item
+        Name = '@DateExpiri'
+        Attributes = [paNullable]
+        DataType = ftInteger
+        Precision = 10
+        Value = Null
+      end
+      item
+        Name = '@Stepeni'
+        Attributes = [paNullable]
+        DataType = ftInteger
+        Precision = 10
+        Value = Null
+      end>
+    Prepared = True
+    Left = 552
+    Top = 72
+  end
+  object s: TDataSource
+    DataSet = ADODSExport
+    Left = 544
+    Top = 128
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 30
+    OnTimer = Timer1Timer
+    Left = 368
+    Top = 112
+  end
+end

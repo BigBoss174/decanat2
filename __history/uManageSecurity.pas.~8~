@@ -1,0 +1,218 @@
+unit uManageSecurity;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, ExtCtrls, Buttons;
+  
+type
+  TfManageSecurity = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    dbgSecurityGroup: TDBGridEh;
+    dbgSecurityUser: TDBGridEh;
+    dbgSecurityAccessLevel: TDBGridEh;
+    sbSecurityGroupAdd: TSpeedButton;
+    sbSecurityGroupDelete: TSpeedButton;
+    sbSecurityUserDelete: TSpeedButton;
+    sbSecurityUserAdd: TSpeedButton;
+    sbSecurityAccessLevelDelete: TSpeedButton;
+    sbSecurityAccessLevelAdd: TSpeedButton;
+    Splitter1: TSplitter;
+    Panel7: TPanel;
+    Splitter2: TSplitter;
+    dbgVisibleGroups: TDBGridEh;
+    Label4: TLabel;
+    sbVisibleGroupsAdd: TSpeedButton;
+    sbVisibleGroupsDelete: TSpeedButton;
+    Splitter3: TSplitter;
+    sbSecurityUserPasswordChange: TSpeedButton;
+    procedure sbSecurityGroupDeleteClick(Sender: TObject);
+    procedure sbSecurityUserDeleteClick(Sender: TObject);
+    procedure sbSecurityAccessLevelDeleteClick(Sender: TObject);
+    procedure sbSecurityGroupAddClick(Sender: TObject);
+    procedure sbSecurityAccessLevelAddClick(Sender: TObject);
+    procedure sbSecurityUserAddClick(Sender: TObject);
+    procedure sbVisibleGroupsDeleteClick(Sender: TObject);
+    procedure sbVisibleGroupsAddClick(Sender: TObject);
+    procedure sbSecurityUserPasswordChangeClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fManageSecurity: TfManageSecurity;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  uDM, uAddSecurityVisibleGroups;
+
+procedure TfManageSecurity.sbSecurityAccessLevelAddClick(Sender: TObject);
+var
+  s: string;
+begin
+  if(DM.adodsSecurityGroup.RecordCount=0)
+  then exit;
+
+  s := inputbox('Новый уровень доступа', 'Введите название элемента для задания ему настроек доступа', '');
+  if(s<>'')
+  then
+      begin
+      DM.ADOSQLExecutor.CommandText := 'exec usp_SecurityElementAdd '+#39+s+#39;
+      DM.ADOSQLExecutor.Execute;
+
+      DM.adodsSecurityElementList.Requery();
+      DM.adodsSecurityAccessLevel.Requery();
+      end;
+end;
+
+procedure TfManageSecurity.sbSecurityAccessLevelDeleteClick(Sender: TObject);
+begin
+  if(DM.adodsSecurityAccessLevel.RecordCount=0)
+  then exit;
+
+  if(MessageBox(handle, 'Настройка уровня доступа к элементу будет удалена у всех групп! Продолжить?', 'Внимание!', MB_OKCANCEL)=IDOK)
+  then
+      begin
+      DM.ADOSQLExecutor.CommandText := 'delete from SecurityElementList where id='+DM.adodsSecurityAccessLevelIDElement.AsString;
+      DM.ADOSQLExecutor.Execute;
+      DM.adodsSecurityAccessLevel.Requery;
+      end;
+end;
+
+procedure TfManageSecurity.sbSecurityGroupDeleteClick(Sender: TObject);
+begin
+  if(DM.adodsSecurityGroup.RecordCount=0)
+  then exit;
+
+  if(MessageBox(handle, 'Удалить выделенную группу доступа?', 'Внимание!', MB_OKCANCEL)=IDOK)
+  then
+      begin
+      DM.adodsSecurityGroup.Delete;
+      end;
+end;
+
+procedure TfManageSecurity.sbSecurityUserAddClick(Sender: TObject);
+var
+  s: string;
+begin
+  if(DM.adodsSecurityGroup.RecordCount=0)
+  then exit;
+
+  s := inputbox('Новый пользователь', 'Введите логин пользователя', '');
+  if(s<>'')
+  then
+      begin
+      DM.adodsSecurityUserAdd.Close;
+      DM.adodsSecurityUserAdd.Parameters[1].Value := DM.adodsSecurityGroupID.AsInteger;
+      DM.adodsSecurityUserAdd.Parameters[2].Value := s;
+      DM.adodsSecurityUserAdd.Open;
+
+      if(DM.adodsSecurityUserAdd.RecordCount=0)
+      then
+          begin
+          showmessage('Такой пользователь уже существует!');
+          end
+      else
+          begin
+          DM.adodsSecurityUser.Requery();
+          DM.adodsSecurityUser.Locate('id',DM.adodsSecurityUserAdd.Fields.Fields[0].AsInteger,[]);
+          sbSecurityUserPasswordChangeClick(nil);
+          end;
+      end;
+end;
+
+procedure TfManageSecurity.sbSecurityUserDeleteClick(Sender: TObject);
+begin
+  if(DM.adodsSecurityUser.RecordCount=0)
+  then exit;
+
+  if(MessageBox(handle, 'Удалить выделенного пользователя?', 'Внимание!', MB_OKCANCEL)=IDOK)
+  then
+      begin
+      DM.adodsSecurityUser.Delete;
+      end;
+end;
+
+procedure TfManageSecurity.sbVisibleGroupsAddClick(Sender: TObject);
+begin
+  if(DM.adodsSecurityGroup.RecordCount=0)
+  then exit;
+
+  fAddSecurityVisibleGroups.LoadTree(DM.adodsSecurityGroupID.AsInteger);
+  fAddSecurityVisibleGroups.ShowModal;
+end;
+
+procedure TfManageSecurity.sbVisibleGroupsDeleteClick(Sender: TObject);
+begin
+  if(DM.adodsSecurityVisibleGroups.RecordCount=0)
+  then exit;
+
+  if(MessageBox(handle, 'Удалить видимую группу?', 'Внимание!', MB_OKCANCEL)=IDOK)
+  then
+      begin
+      ShowMessage(dm.adodsSecurityVisibleGroupsidSecurityGroup.AsString );
+      ShowMessage(dm.adodsSecurityVisibleGroupsidGroup.AsString );
+      DM.ADOSQLExecutor.CommandText :=
+'delete [Decanat].[dbo].[SecurityGroupVisibleGroups] where idSecurityGroup= '+dm.adodsSecurityVisibleGroupsidSecurityGroup.AsString + ' and idgroup='+dm.adodsSecurityVisibleGroupsidGroup.AsString+ ' and idfaculty='+dm.adodsSecurityVisibleGroupsidFaculty.AsString;
+          DM.ADOSQLExecutor.Execute;
+      end;
+end;
+
+procedure TfManageSecurity.sbSecurityUserPasswordChangeClick(Sender: TObject);
+var
+  s1, s2: string;
+begin
+  if(DM.adodsSecurityUser.RecordCount=0)
+  then exit;
+
+  s1 := inputBox('Смена пароля', 'Введите пароль', '');
+  s2 := inputBox('Смена пароля', 'Повторите ввод пароля', '');
+
+  if(s1<>s2)
+  then
+      begin
+      showmessage('Введенные пароли не совпадают!');
+      exit;
+      end;
+
+  if(s1='')
+  then exit;
+
+  DM.ADOSQLExecutor.CommandText :=
+    'update SecurityUser '+
+    'set [password]=dbo.udf_PasswordGetHash('+#39+s1+#39+')'+
+    'where id='+DM.adodsSecurityUser.Fields.Fields[0].AsString;
+  DM.ADOSQLExecutor.Execute;
+end;
+
+procedure TfManageSecurity.sbSecurityGroupAddClick(Sender: TObject);
+var
+  s: string;
+begin
+  s := inputbox('Новая группа', 'Введите название группы', '');
+  if(s<>'')
+  then
+      begin
+      DM.ADOSQLExecutor.CommandText := 'exec usp_SecurityGroupAdd '+#39+s+#39;
+      DM.ADOSQLExecutor.Execute;
+
+      DM.adodsSecurityGroup.Requery();
+      DM.adodsSecurityAccessLevel.Requery();
+      end;
+end;
+
+end.

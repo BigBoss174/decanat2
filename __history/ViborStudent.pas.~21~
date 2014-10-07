@@ -1,0 +1,349 @@
+unit ViborStudent;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ButtonGroup, ComCtrls, ExtCtrls, ToolWin, ImgList, Buttons,
+  DBCtrls, Grids, DBGrids, StdCtrls, Mask, ieview, imageenview, dbimageen,
+  DBCtrlsEh, DB, ieopensavedlg, XPMan, DBGridEh, DBLookupEh, JPEG,
+  DBGridEhGrouping, GridsEh, RzTreeVw, ADODB, DateUtils;
+
+
+type
+  TForm3 = class(TForm)
+    TTVmain: TRzTreeView;
+    Button1: TButton;
+    Button2: TButton;
+    procedure LoadTree(ID: integer; FacultyName: string);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure TTVmainChange(Sender: TObject; Node: TTreeNode);
+    procedure vivod;
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+  PreviousSelectedNode : TTreeNode;
+  y:byte;
+  i:byte;
+implementation
+
+uses uMain, uDM, uLoadTreeProgress, PerevStud, Perevod;
+
+{$R *.dfm}
+
+procedure  TForm3.vivod;
+var t:integer;b:boolean;
+begin
+   dm.adodsGroupData.Close;
+ dm.adodsGroupData.Parameters[0].Value:=DM.ADODSStudentListIDGroup.Value;
+  dm.adodsGroupData.open;
+  b:=true;
+t:=1;
+      while Perevod.Form1.StringGrid1.Cells[1,t]<>'' do
+        begin
+          if Perevod.Form1.StringGrid1.Cells[6,t]=DM.ADODSStudentListID.AsString then
+            begin
+            Showmessage('Данный студент уже добавлен '+DM.ADODSStudentListNameS.AsString);
+           b:=false;
+            end;
+            t:=t+1;
+        end;
+           if (b) and ((DM.ADODSStudentListStatus.Value=0) or (DM.ADODSStudentListStatus.Value=4)) then
+          begin
+         Perevod.Form1.StringGrid1.Cells[1,i]:=DM.ADODSStudentListNameF.Value;
+         Perevod.Form1.StringGrid1.Cells[2,i]:=DM.adodsStudentListNameI.Value;
+         Perevod.Form1.StringGrid1.Cells[3,i]:=DM.adodsStudentListNameO.Value;
+          Perevod.Form1.StringGrid1.Cells[4,i]:= dm.adodsStudentListkurs.AsString;
+           Perevod.Form1.StringGrid1.Cells[5,i]:= dm.ADODSGroupDataGroupName.Value;
+         Perevod.Form1.StringGrid1.Cells[6,i]:=DM.ADODSStudentListID.AsString;
+          Perevod.Form1.StringGrid1.Cells[0,i]:=inttostr(i);
+          i:=i+1;
+          Perevod.Form1.stringGrid1.RowCount:= Perevod.Form1.stringGrid1.RowCount+1;
+          end;
+      end;
+
+
+
+
+procedure TForm3.Button1Click(Sender: TObject);
+var kurs,grupa:string;e:integer;
+begin
+i:=Perevod.Form1.stringGrid1.RowCount-1;
+  case PreviousSelectedNode.Level of
+ 0:  begin
+    dm.adodsStudentList.Close;
+ dm.ADODSStudentList.Parameters[0].Value:=y;
+  dm.adodsStudentList.open;
+  while not(dm.ADODSStudentList.Eof) do
+    begin
+    vivod;
+    dm.ADODSStudentList.Next;
+    end;
+ end;
+ 1: begin
+               dm.adodsStudentList.Close;
+ dm.ADODSStudentList.Parameters[0].Value:=y;
+  dm.adodsStudentList.open;
+  while not(dm.ADODSStudentList.Eof) do
+    begin
+    if (dm.ADODSStudentListKurs.Value=PreviousSelectedNode.StateIndex)  then
+    vivod;
+    dm.ADODSStudentList.Next;
+    end;
+ end;
+ 2:
+ begin
+    dm.adodsStudentList.Close;
+ dm.ADODSStudentList.Parameters[0].Value:=y;
+  dm.adodsStudentList.open;
+  while not(dm.ADODSStudentList.Eof) do
+    begin
+    if (dm.ADODSStudentListIDGroup.Value=PreviousSelectedNode.StateIndex)  then
+    vivod;
+    dm.ADODSStudentList.Next;
+    end;
+ end;
+3:
+  begin
+  e:=0;
+while Perevod.Form1.StringGrid1.Cells[1,e]<>'' do
+ begin
+ if Perevod.Form1.StringGrid1.Cells[6,e]=DM.ADODSStudentdataID.AsString then
+begin
+ Showmessage('Данный студент уже добавлен');
+ exit;
+end;
+   e:=e+1;
+ end;
+ dm.adodsGroupData.Close;
+ dm.adodsGroupData.Parameters[0].Value:=DM.adodsStudentDataIDGroup.Value;
+  dm.adodsGroupData.open;
+ Perevod.Form1.StringGrid1.Cells[1,i]:=DM.adodsStudentDataNameF.Value;
+  Perevod.Form1.StringGrid1.Cells[2,i]:=DM.adodsStudentDataNameI.Value;
+   Perevod.Form1.StringGrid1.Cells[3,i]:=DM.adodsStudentDataNameO.Value;
+    Perevod.Form1.StringGrid1.Cells[4,i]:= dm.adodsGroupDatakurs.AsString;
+     Perevod.Form1.StringGrid1.Cells[5,i]:= dm.adodsGroupDataGroupName.Value;
+ Perevod.Form1.StringGrid1.Cells[6,i]:=DM.ADODSStudentdataID.AsString;
+  Perevod.Form1.StringGrid1.Cells[0,i]:=inttostr(i);
+ Perevod.Form1.stringGrid1.RowCount:= Perevod.Form1.stringGrid1.RowCount+1;
+  end;
+  end;
+  ShowMessage('Добавлено '+inttostr(Perevod.Form1.stringGrid1.RowCount-2)+' студентов');
+end;
+
+procedure TForm3.Button2Click(Sender: TObject);
+begin
+form3.Close;
+end;
+
+procedure TForm3.FormShow(Sender: TObject);
+begin
+Form3.FormStyle:=fsStayOnTop;
+PreviousSelectedNode := nil;
+  LoadTree(DM.ADODSFacultiesID.AsInteger, DM.ADODSFacultiesFacultyName.AsString);
+end;
+
+procedure TForm3.LoadTree(ID: integer; FacultyName: string);
+var
+  RootNode, GroupNode, StudentNode,
+  ArchiveNode,
+  Kurs1, Kurs2, Kurs3, Kurs4, Kurs5 : TTreeNode;
+  aArchiveYearNode, aExpelledNode, aGraduatedNode, aDeletedNode : array [0..4] of TTreeNode;
+  i, dff: byte;
+  ExpiryGroup, ExpiryStudent, CurrentYear : integer;
+begin
+  if(monthOf(date)<8)
+  then CurrentYear := yearOf(date)
+  else CurrentYear := yearOf(date)+1;
+
+  for i := 0 to 4 do
+      begin
+      aArchiveYearNode[i] := nil;
+      aExpelledNode[i] := nil;
+      aGraduatedNode[i] := nil;
+      aDeletedNode[i] := nil;
+      end;
+
+  DM.adodsSecurityGetRights.First;
+
+  fLoadTreeProgress.Show;
+  fLoadTreeProgress.PBKurs.Position := 0;
+  DM.DSStudentList.DataSet := nil;
+
+  TTVmain.Items.Clear;
+
+  RootNode := TTVmain.Items.AddFirst(nil, FacultyName);
+  RootNode.ImageIndex := 0;
+  RootNode.SelectedIndex := 1;
+  RootNode.StateIndex := id;
+
+  ArchiveNode := TTVmain.Items.Add(nil, 'Архив');
+  ArchiveNode.ImageIndex := 0;
+  ArchiveNode.SelectedIndex := 1;
+  ArchiveNode.StateIndex := id;
+
+  Kurs1 := TTVmain.Items.AddChild(RootNode, 'курс');
+  Kurs2 := TTVmain.Items.AddChild(RootNode, 'курс');
+  Kurs3 := TTVmain.Items.AddChild(RootNode, 'курс');
+  Kurs4 := TTVmain.Items.AddChild(RootNode, 'курс');
+  Kurs5 := TTVmain.Items.AddChild(RootNode, 'курс');
+
+  Kurs1.ImageIndex := 2;
+  Kurs1.SelectedIndex := 3;
+  Kurs1.StateIndex := 1;
+
+  Kurs2.ImageIndex := 18;
+  Kurs2.SelectedIndex := 19;
+  Kurs2.StateIndex := 2;
+
+  Kurs3.ImageIndex := 20;
+  Kurs3.SelectedIndex := 21;
+  Kurs3.StateIndex := 3;
+
+  Kurs4.ImageIndex := 22;
+  Kurs4.SelectedIndex := 23;
+  Kurs4.StateIndex := 4;
+
+  Kurs5.ImageIndex := 24;
+  Kurs5.SelectedIndex := 25;
+  Kurs5.StateIndex := 5;
+
+  DM.ADODSGroups.Close;
+  DM.ADODSGroups.Parameters[0].Value := ID;
+  DM.ADODSGroups.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSGroups.Open;
+
+//-------сбрасываем сортировку и очищаем фильтр в ДАТАСЕТЕ
+  DM.ADODSStudentList.Close;
+  DM.ADODSStudentList.Parameters[0].Value := ID;
+  DM.ADODSStudentList.Parameters[1].Value := DM.adodsSecurityGetRightsIDGroup.AsInteger;
+  DM.ADODSStudentList.Open;
+  DM.ADODSStudentList.Sort := '';
+  DM.ADODSStudentList.Filter := '';
+
+  fLoadTreeProgress.PBKurs.Max := DM.ADODSStudentList.RecordCount;
+
+  TTVMain.Enabled := True;
+
+  while not(DM.ADODSGroups.Eof) do
+      begin
+      if(DM.ADODSGroupsDateOfExpiry.AsVariant=null)
+      then
+          begin
+          case DM.ADODSGroupsKurs.AsInteger of
+              1:  GroupNode := TTVmain.Items.AddChild(Kurs1, DM.ADODSGroupsGroupName.AsString);
+              2:  GroupNode := TTVmain.Items.AddChild(Kurs2, DM.ADODSGroupsGroupName.AsString);
+              3:  GroupNode := TTVmain.Items.AddChild(Kurs3, DM.ADODSGroupsGroupName.AsString);
+              4:  GroupNode := TTVmain.Items.AddChild(Kurs4, DM.ADODSGroupsGroupName.AsString);
+              5:  GroupNode := TTVmain.Items.AddChild(Kurs5, DM.ADODSGroupsGroupName.AsString);
+          end;
+
+          GroupNode.ImageIndex := 4;
+          GroupNode.SelectedIndex := 5;
+          GroupNode.StateIndex := DM.ADODSGroupsID.AsInteger;
+          end
+      else
+          begin
+          if(monthOf(DM.ADODSGroupsDateOfExpiry.AsDateTime)<8)
+          then ExpiryGroup := yearOf(DM.ADODSGroupsDateOfExpiry.AsDateTime)
+          else ExpiryGroup := yearOf(DM.ADODSGroupsDateOfExpiry.AsDateTime)+1;
+          showmessage(inttostr(expirygroup));
+          end;
+
+      while(not(DM.ADODSStudentList.Eof))and(DM.ADODSGroupsID.AsInteger=DM.ADODSStudentListIDGroup.AsInteger) do
+          begin
+          if((DM.ADODSStudentListStatus.AsInteger=0) or (DM.ADODSStudentListStatus.AsInteger=2) or (DM.ADODSStudentListStatus.AsInteger=4))
+          then
+              if(DM.ADODSGroupsDateOfExpiry.AsVariant=null)
+              then
+                  begin
+                  StudentNode := TTVmain.Items.AddChild(GroupNode, DM.ADODSStudentListNameS.AsString);
+                  end
+              else
+                  begin
+                  dff := CurrentYear-ExpiryGroup;
+                  if(aArchiveYearNode[dff]=nil)
+                  then
+                      begin
+                      aArchiveYearNode[dff] := TTVmain.Items.AddChild(ArchiveNode, inttostr(ExpiryGroup-1)+'/'+inttostr(ExpiryGroup));
+                      aExpelledNode[dff]  := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Отчисленные');
+                      aGraduatedNode[dff] := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Выпускники');
+                      aDeletedNode[dff]   := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Удаленные');
+
+                      aArchiveYearNode[dff].StateIndex := ExpiryStudent;
+                      aExpelledNode[dff].StateIndex := 1;
+                      aGraduatedNode[dff].StateIndex := 3;
+                      aDeletedNode[dff].StateIndex := 5;
+                      end;
+
+                  StudentNode := TTVmain.Items.AddChild(aDeletedNode[dff], DM.ADODSStudentListNameS.AsString)
+                  end
+          else
+              begin
+              if(monthOf(DM.ADODSStudentListDateOfExpiry.AsDateTime)<8)
+              then ExpiryStudent := yearOf(DM.ADODSStudentListDateOfExpiry.AsDateTime)
+              else ExpiryStudent := yearOf(DM.ADODSStudentListDateOfExpiry.AsDateTime)+1;
+              dff := CurrentYear-ExpiryStudent;
+
+              if(aArchiveYearNode[dff]=nil)
+              then
+                  begin
+                  aArchiveYearNode[dff] := TTVmain.Items.AddChild(ArchiveNode, inttostr(ExpiryStudent-1)+'/'+inttostr(ExpiryStudent));
+                  aExpelledNode[dff]  := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Отчисленные');
+                  aGraduatedNode[dff] := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Выпускники');
+                  aDeletedNode[dff]   := TTVmain.Items.AddChild(aArchiveYearNode[dff], 'Удаленные');
+
+                  aArchiveYearNode[dff].StateIndex := ExpiryStudent;
+                  aExpelledNode[dff].StateIndex := 1;
+                  aGraduatedNode[dff].StateIndex := 3;
+                  aDeletedNode[dff].StateIndex := 5;
+                  end;
+
+              case(DM.ADODSStudentListStatus.AsInteger)of
+                  1:  StudentNode := TTVmain.Items.AddChild(aExpelledNode[dff], DM.ADODSStudentListNameS.AsString);
+                  3:  StudentNode := TTVmain.Items.AddChild(aGraduatedNode[dff], DM.ADODSStudentListNameS.AsString);
+                  5:  StudentNode := TTVmain.Items.AddChild(aDeletedNode[dff], DM.ADODSStudentListNameS.AsString);
+              end;
+
+              end;
+
+              StudentNode.ImageIndex := DM.ADODSStudentListMarks.AsInteger;
+              StudentNode.SelectedIndex := DM.ADODSStudentListMarks.AsInteger;
+              StudentNode.StateIndex := DM.ADODSStudentListID.AsInteger;
+
+              fLoadTreeProgress.PBKurs.Position := DM.ADODSStudentList.RecNo;
+              DM.ADODSStudentList.Next;
+          end;
+
+//      fLoadTreeProgress.Refresh;
+      DM.ADODSGroups.Next;
+      end;
+
+  DM.ADODSStudentList.First;
+
+  fLoadTreeProgress.Hide;
+  DM.DSStudentList.DataSet := DM.ADODSStudentList;
+end;
+
+procedure TForm3.TTVmainChange(Sender: TObject; Node: TTreeNode);
+begin
+ case Node.Level of
+ 0:  y:=Node.StateIndex;
+ 3: begin
+ DM.ADODSStudentData.Close;
+ DM.ADODSStudentData.Parameters[0].Value := Node.StateIndex;
+ DM.ADODSStudentData.Open;
+  end;
+ end;
+PreviousSelectedNode:=node;
+
+end;
+
+end.

@@ -1,0 +1,94 @@
+unit uperstudentgroup;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls, DBCtrls, DB, ADODB, DBGridEh, Mask, DBCtrlsEh,
+  DBLookupEh;
+
+type
+  Tfperstudentgroup = class(TForm)
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    ComboBox1: TComboBox;
+    DSFak: TDataSource;
+    ADODSFak: TADODataSet;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    ADODSFakID: TAutoIncField;
+    ADODSFakFN: TWideStringField;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fperstudentgroup: Tfperstudentgroup;
+
+implementation
+
+uses uDM, uMain;
+
+{$R *.dfm}
+
+procedure Tfperstudentgroup.ComboBox1CloseUp(Sender: TObject);
+begin
+dm.ADODSGroupa.Close;
+dm.ADODSGroupa.Parameters[0].Value:=ComboBox1.ItemIndex+1;
+dm.ADODSGroupa.Parameters[1].Value:=ADODSFakID.AsInteger;
+dm.ADODSGroupa.open;
+  DBLookupComboboxEh2.Enabled:=true;
+end;
+
+procedure Tfperstudentgroup.DBLookupComboboxEh1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+ComboBox1.Enabled:=true;
+end;
+
+procedure Tfperstudentgroup.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   DBLookupComboboxEh2.Enabled:=false;
+   ComboBox1.Enabled:=false;
+
+end;
+
+procedure Tfperstudentgroup.FormShow(Sender: TObject);
+begin
+fperstudentgroup.FormStyle:=fsStayOnTop;
+
+end;
+
+procedure Tfperstudentgroup.SpeedButton1Click(Sender: TObject);
+begin
+ fperstudentgroup.Close;
+end;
+
+procedure Tfperstudentgroup.SpeedButton2Click(Sender: TObject);
+begin
+dm.ADODSGroupa.Close;
+dm.ADODSGroupa.Parameters[0].Value:=ComboBox1.ItemIndex+1;
+dm.ADODSGroupa.Parameters[1].Value:=ADODSFakID.AsInteger;
+dm.ADODSGroupa.open;
+DM.ADODSStudentData.Close;
+DM.ADOSQLExecutor.CommandText := 'update studentData set idgroup='+inttostr(DBLookupComboboxEh2.KeyValue)+'where id='+inttostr(fMain.TTVmain.Selected.StateIndex);
+DM.ADOSQLExecutor.Execute;
+ dm.ADODUpdSessionOld.close;
+ dm.ADODUpdSessionOld.Parameters[1].Value:=DBLookupComboboxEh2.KeyValue;
+dm.ADODUpdSessionOld.open;
+fmain.TTVMain.Selected.Delete;
+end;
+
+end.

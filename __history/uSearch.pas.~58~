@@ -1,0 +1,303 @@
+unit uSearch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, DBCtrlsEh, StdCtrls, ExtCtrls, RzEdit, RzSpnEdt,
+  DBGridEhGrouping, GridsEh, DBGridEh, DBLookupEh, frxClass, frxDBSet;
+    {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TSearch = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit5: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    Button1: TButton;
+    Edit4: TEdit;
+    Panel2: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Edit12: TEdit;
+    Button2: TButton;
+    CheckBox1: TCheckBox;
+    frxDBDSearch: TfrxDBDataset;
+    frxSearch: TfrxReport;
+    Button3: TButton;
+    Panel3: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit5KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit7KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit8KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit12KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit9KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit10KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit11KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridEh1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Search: TSearch;
+
+implementation
+
+uses uDM, uMain;
+
+{$R *.dfm}
+
+procedure TSearch.Button1Click(Sender: TObject);
+var s:string;
+begin
+dm.ADODSSearch.Close;
+if CheckBox1.Checked then
+dm.ADODSSearch.Parameters[1].Value:=1
+else
+dm.ADODSSearch.Parameters[1].Value:=0;
+
+if trim(edit4.text)<>'' then
+begin
+dm.ADODSSearch.Parameters[2].Value:= strtoint(trim(edit4.text));
+dm.ADODSSearch.Parameters[3].Value:= strtoint(trim(edit4.text));
+end
+else
+begin
+ dm.ADODSSearch.Parameters[2].Value:=0;
+dm.ADODSSearch.Parameters[3].Value:= 10;
+end;
+ dm.ADODSSearch.Parameters[4].Value:='%'+trim(edit1.text)+'%';
+ dm.ADODSSearch.Parameters[5].Value:= '%'+trim(edit2.text)+'%';
+ dm.ADODSSearch.Parameters[6].Value:= '%'+trim(edit3.text)+'%';
+  dm.ADODSSearch.Parameters[7].Value:= '%'+trim(edit5.text)+'%';
+  if (DBLookupComboboxEh1.Text<>'') then
+    begin
+
+        dm.ADODSSearch.Parameters[8].Value:= DBLookupComboboxEh1.KeyValue;
+        dm.ADODSSearch.Parameters[9].Value:= DBLookupComboboxEh1.KeyValue;
+    end
+    else
+    begin
+       dm.ADODSSearch.Parameters[8].Value:=0;
+        dm.ADODSSearch.Parameters[9].Value:= 100;
+    end;
+    dm.ADODSSearch.Parameters[10].Value:='%'+trim(edit6.text)+'%';
+ dm.ADODSSearch.Parameters[11].Value:= '%'+trim(edit8.text)+'%';
+ dm.ADODSSearch.Parameters[12].Value:= '%'+trim(edit12.text)+'%';
+  dm.ADODSSearch.Parameters[13].Value:= '%'+trim(edit7.text)+'%';
+  dm.ADODSSearch.Parameters[14].Value:= '%'+trim(edit9.text)+'%';
+  dm.ADODSSearch.Parameters[15].Value:= '%'+trim(edit10.text)+'%';
+    dm.ADODSSearch.Parameters[16].Value:= '%'+trim(edit11.text)+'%';
+    if trim(edit6.text)=''
+    then   DBGridEh1.FieldColumns['BirthPlace'].Visible:=false
+    else   DBGridEh1.FieldColumns['BirthPlace'].Visible:=true;
+
+    if trim(edit7.text)=''
+    then   DBGridEh1.FieldColumns['Registration'].Visible:=false
+    else   DBGridEh1.FieldColumns['Registration'].Visible:=true;
+
+    if trim(edit8.text)=''
+    then   DBGridEh1.FieldColumns['PassportSeries'].Visible:=false
+    else   DBGridEh1.FieldColumns['PassportSeries'].Visible:=true;
+
+    if trim(edit12.text)=''
+    then   DBGridEh1.FieldColumns['PassportNumber'].Visible:=false
+    else   DBGridEh1.FieldColumns['PassportNumber'].Visible:=true;
+
+    if trim(edit9.text)=''
+    then   DBGridEh1.FieldColumns['PhoneNumber'].Visible:=false
+    else   DBGridEh1.FieldColumns['PhoneNumber'].Visible:=true;
+
+    if trim(edit10.text)=''
+    then   DBGridEh1.FieldColumns['RecordBookNumber'].Visible:=false
+    else   DBGridEh1.FieldColumns['RecordBookNumber'].Visible:=true;
+    if trim(edit11.text)=''
+    then   DBGridEh1.FieldColumns['AgreementNumber'].Visible:=false
+    else   DBGridEh1.FieldColumns['AgreementNumber'].Visible:=true;
+   dm.ADODSSearch.open;
+
+end;
+
+procedure TSearch.Button2Click(Sender: TObject);
+begin
+if Button2.Caption='>' then
+begin
+  Button2.Caption:='<' ;
+  Search.Width:=800;
+  Panel2.Visible:=true;
+end
+  else
+  begin
+   Button2.Caption:='>' ;
+  Search.Width:=610;
+  Panel2.Visible:=false;
+  end;
+end;
+
+procedure TSearch.Button3Click(Sender: TObject);
+begin
+frxSearch.ShowReport();
+end;
+
+procedure TSearch.DBGridEh1DblClick(Sender: TObject);
+begin
+  fmain.TDBLCFaculties
+     if  true then
+begin
+      dm.ADODSFaculties.first;
+  while (dm.ADODSFaculties.eof) or (dm.ADODSFacultiesID.AsInteger<>dm.ADODSSearchid.Asinteger) do
+     dm.ADODSFaculties.Next;
+
+    fMain.TDBLCFaculties.KeyValue:=  dm.ADODSFacultiesID.AsInteger;
+      fMain.TDBLCFacultiesCloseUp(self);
+
+
+    fmain.TSStudent.Visible := true;
+  fmain.TPCmain.ActivePageIndex := 1;
+
+  // заносим данные о выбранном студенте
+  dm.adodsStudentData.Close;
+  dm.adodsStudentData.Parameters[0].Value := dm.ADODSSearchidstud.AsInteger;
+  dm.adodsStudentData.open;
+
+ fmain.QuickSearch(fmain.TTVmain, dm.ADODSStudentDataID.AsInteger);
+ Search.Close;
+
+end
+  else
+  ShowMessage('—тудент находитс€ на недоступном вам факультете');
+end;
+
+procedure TSearch.DBGridEh1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+begin
+with  DBGridEh1.Canvas do
+begin
+case dm.ADODSsearchstatus.Value of
+0:Brush.Color:=$00B7FFAE;
+4:Brush.Color:=$00B7FFAE;
+2:Brush.Color:=$00C1C1FF;
+1:Brush.Color:=clSilver;
+3:Brush.Color:=clSilver;
+5:Brush.Color:=clSilver;
+end;
+Font.Color:=clBlack;
+FillRect(Rect);
+TextOut(Rect.Left+2,Rect.Top+2,Column.Field.Text);
+end;
+end;
+
+procedure TSearch.DBLookupComboboxEh1KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit10KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit11KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit12KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+ if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit5KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit7KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit8KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+procedure TSearch.Edit9KeyPress(Sender: TObject; var Key: Char);
+begin
+if (key=#13) then
+    Button1.Click;
+end;
+
+end.

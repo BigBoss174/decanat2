@@ -1,0 +1,65 @@
+unit uDMfromUPlan;
+
+interface
+
+uses
+  SysUtils, Classes, DB, ADODB, frxClass, frxDBSet,windows;
+   {$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$SETPEFlAGS IMAGE_FILE_RELOCS_STRIPPED or IMAGE_FILE_DEBUG_STRIPPED or
+IMAGE_FILE_LINE_NUMS_STRIPPED or IMAGE_FILE_LOCAL_SYMS_STRIPPED or
+IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP or IMAGE_FILE_NET_RUN_FROM_SWAP}
+type
+  TfDMfromUplan = class(TDataModule)
+    adocUPlan: TADOConnection;
+    adodsPlans: TADODataSet;
+    dsPlans: TDataSource;
+    adodsPlansid: TAutoIncField;
+    adodsPlansSpec: TStringField;
+    adodsPlansNspec: TStringField;
+    adodsPlansSokr_name: TStringField;
+    adodsPlansSpecializ: TStringField;
+    adodsPlansKvalif: TStringField;
+    adodsPlansForm_obuch: TStringField;
+    adodsPlansGod_utverzhd: TIntegerField;
+    adodsPlanssrok_obuch: TFloatField;
+    adodsPlansPlan_type: TIntegerField;
+    adodsCurriculumDisciplines: TADODataSet;
+    dsCurriculumDiscliplines: TDataSource;
+    adodsCurriculumDisciplinessemester: TIntegerField;
+    adodsCurriculumDisciplinesname: TStringField;
+    adodsCurriculumDisciplinesHoursInWeek: TFloatField;
+    adodsCurriculumDisciplinesHourLecture: TIntegerField;
+    adodsCurriculumDisciplinesHourSeminar: TIntegerField;
+    adodsCurriculumDisciplinesHourPractice: TIntegerField;
+    adodsCurriculumDisciplinesHourSmallGroup: TIntegerField;
+    adodsCurriculumDisciplinesHourIndividual: TIntegerField;
+    adodsCurriculumDisciplinesHourSelfWork: TIntegerField;
+    adodsCurriculumDisciplinesControlExamination: TIntegerField;
+    adodsCurriculumDisciplinesControlTest: TIntegerField;
+    adodsCurriculumDisciplinesControlCourseWork: TIntegerField;
+    adodsCurriculum: TADODataSet;
+    dsCurriculum: TDataSource;
+    adodsCurriculumID: TAutoIncField;
+    adodsCurriculumKod: TStringField;
+    adodsCurriculumSpec: TStringField;
+    adodsCurriculumSpez: TStringField;
+    adodsCurriculumKval: TStringField;
+    adodsCurriculumSokr: TStringField;
+    adodsCurriculumPlan_type: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fDMfromUplan: TfDMfromUplan;
+
+implementation
+
+uses uDM;
+
+{$R *.dfm}
+
+end.

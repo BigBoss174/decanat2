@@ -1,0 +1,258 @@
+object fDMfromUplan: TfDMfromUplan
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 689
+  Top = 150
+  Height = 328
+  Width = 485
+  object adocUPlan: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Password=This fish riba;Persist Security Inf' +
+      'o=True;User ID=ProgramsUser;Initial Catalog=U_plan;Data Source=S' +
+      'QL2008R2;Use Procedure for Prepare=1;Auto Translate=True;Packet ' +
+      'Size=4096;Workstation ID=NONSTYLE;Use Encryption for Data=False;' +
+      'Tag with column collation when possible=False'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 24
+    Top = 8
+  end
+  object adodsPlans: TADODataSet
+    Active = True
+    Connection = adocUPlan
+    CursorType = ctStatic
+    Filtered = True
+    CommandText = 
+      'select p.id,'#13#10#9'sp.name as Spec,'#13#10#9'sp.kod as Nspec,'#13#10#9's.name as S' +
+      'okr_name,'#13#10#9'spz.name as Specializ,'#13#10#9'kv.name as Kvalif,'#13#10#9'fo.nam' +
+      'e as Form_obuch,'#13#10#9'p.God_utverzhd,'#13#10#9'p.srok_obuch,'#13#10#9'p.Plan_type' +
+      #13#10'from work_plans p'#13#10'join specs sp on p.Spec_ID=sp.id'#13#10'join Spet' +
+      'sializatsii spz on p.Specializ=spz.id'#13#10'join Sokr s on p.Sokr_id=' +
+      's.id'#13#10'join forms_obuch fo on p.form_obuch=fo.id'#13#10'join Kvalifikat' +
+      'sii kv on p.Kvalif=kv.id'
+    Parameters = <>
+    Prepared = True
+    Left = 24
+    Top = 64
+    object adodsPlansid: TAutoIncField
+      FieldName = 'id'
+      ReadOnly = True
+    end
+    object adodsPlansSpec: TStringField
+      FieldName = 'Spec'
+      Size = 100
+    end
+    object adodsPlansNspec: TStringField
+      FieldName = 'Nspec'
+      Size = 50
+    end
+    object adodsPlansSokr_name: TStringField
+      FieldName = 'Sokr_name'
+      Size = 50
+    end
+    object adodsPlansSpecializ: TStringField
+      FieldName = 'Specializ'
+      Size = 100
+    end
+    object adodsPlansKvalif: TStringField
+      FieldName = 'Kvalif'
+      Size = 100
+    end
+    object adodsPlansForm_obuch: TStringField
+      FieldName = 'Form_obuch'
+      Size = 50
+    end
+    object adodsPlansGod_utverzhd: TIntegerField
+      FieldName = 'God_utverzhd'
+    end
+    object adodsPlanssrok_obuch: TFloatField
+      FieldName = 'srok_obuch'
+    end
+    object adodsPlansPlan_type: TIntegerField
+      FieldName = 'Plan_type'
+    end
+  end
+  object dsPlans: TDataSource
+    DataSet = adodsPlans
+    Left = 24
+    Top = 112
+  end
+  object adodsCurriculumDisciplines: TADODataSet
+    Active = True
+    Connection = adocUPlan
+    CursorType = ctStatic
+    CommandText = 
+      'select wm.semester, wm.[name], HoursInWeek,'#13#10'sum(wh.lekzii) as H' +
+      'ourLecture, sum(wh.seminars) as HourSeminar, sum(wh.praktiki) as' +
+      ' HourPractice,'#13#10'sum(wh.Melko_grupp) as HourSmallGroup, sum(wh.in' +
+      'divid) as HourIndividual'#13#10'             ,sum(wh.IndependentWork) ' +
+      'as HourSelfWork,'#13#10#9'ControlExamination,'#13#10#9'ControlTest,'#13#10#9'ControlC' +
+      'ourseWork'#13#10'from'#13#10'(select wm.id, wm.plan_id, wm.[name], ss.semest' +
+      'er,'#13#10'case when wm.ekzamens like '#39'%'#39'+cast(ss.semester as varchar(' +
+      '50))+'#39'%'#39' then 1 else 0 end as ControlExamination,'#13#10'case when wm.' +
+      'zachets like '#39'%'#39'+cast(ss.semester as varchar(50))+'#39'%'#39' then 1 els' +
+      'e 0 end as ControlTest,'#13#10'case when wm.kursachi like '#39'%'#39'+cast(ss.' +
+      'semester as varchar(50))+'#39'%'#39' then 1 else 0 end as ControlCourseW' +
+      'ork,'#13#10'case'#13#10#9'when ss.semester=1 then wm.k1s1'#13#10#9'when ss.semester=' +
+      '2 then wm.k1s2'#13#10#9'when ss.semester=3 then wm.k2s1'#13#10#9'when ss.semes' +
+      'ter=4 then wm.k2s2'#13#10#9'when ss.semester=5 then wm.k3s1'#13#10#9'when ss.s' +
+      'emester=6 then wm.k3s2'#13#10#9'when ss.semester=7 then wm.k4s1'#13#10#9'when ' +
+      'ss.semester=8 then wm.k4s2'#13#10#9'when ss.semester=9 then wm.k5s1'#13#10#9'w' +
+      'hen ss.semester=10 then wm.k5s2'#13#10'end as HoursInWeek'#13#10'from work_m' +
+      'ain as wm'#13#10'cross join (select 1 as semester union all select 2 u' +
+      'nion all select 3 union all select 4 union all select 5 union al' +
+      'l select 6 union all select 7 union all select 8 union all selec' +
+      't 9 union all select 10) ss'#13#10'where wm.strtype=3 and wm.IncludeIn' +
+      'Calculation=1'#13#10') wm'#13#10'join work_hours wh on wm.id=wh.main_id'#13#10'joi' +
+      'n work_plans wp on wm.plan_id=wp.id'#13#10'where (HoursInWeek<>0) and ' +
+      '(wh.colId=wm.semester) and (wp.id=:IDPlan)'#13#10'group by wm.id, wm.n' +
+      'ame, wm.semester,'#13#10'HoursInWeek, ControlTest, ControlExamination,' +
+      ' ControlCourseWork'#13#10'order by wm.semester, wm.[name]'
+    Parameters = <
+      item
+        Name = 'IDPlan'
+        Attributes = [paSigned]
+        DataType = ftInteger
+        Precision = 10
+        Size = 4
+        Value = 0
+      end>
+    Prepared = True
+    Left = 208
+    Top = 64
+    object adodsCurriculumDisciplinessemester: TIntegerField
+      FieldName = 'semester'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesname: TStringField
+      FieldName = 'name'
+      Size = 200
+    end
+    object adodsCurriculumDisciplinesHoursInWeek: TFloatField
+      FieldName = 'HoursInWeek'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourLecture: TIntegerField
+      FieldName = 'HourLecture'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourSeminar: TIntegerField
+      FieldName = 'HourSeminar'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourPractice: TIntegerField
+      FieldName = 'HourPractice'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourSmallGroup: TIntegerField
+      FieldName = 'HourSmallGroup'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourIndividual: TIntegerField
+      FieldName = 'HourIndividual'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesHourSelfWork: TIntegerField
+      FieldName = 'HourSelfWork'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesControlExamination: TIntegerField
+      FieldName = 'ControlExamination'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesControlTest: TIntegerField
+      FieldName = 'ControlTest'
+      ReadOnly = True
+    end
+    object adodsCurriculumDisciplinesControlCourseWork: TIntegerField
+      FieldName = 'ControlCourseWork'
+      ReadOnly = True
+    end
+  end
+  object dsCurriculumDiscliplines: TDataSource
+    DataSet = adodsCurriculumDisciplines
+    Left = 208
+    Top = 112
+  end
+  object adodsCurriculum: TADODataSet
+    Active = True
+    Connection = adocUPlan
+    CursorType = ctStatic
+    CommandText = 
+      'select wp.ID, ss.[Kod], ss.[Name] as Spec, sz.[name] as Spez, kv' +
+      '.[name] as Kval, sk.[name] as Sokr, wp.Plan_type'#13#10#9'from [work_pl' +
+      'ans] wp'#13#10#9'join [specs] ss on wp.spec_id=ss.id'#13#10#9'join [Spetsializ' +
+      'atsii] sz on wp.specializ=sz.id'#13#10#9'join [Kvalifikatsii] kv on wp.' +
+      'kvalif=kv.id'#13#10#9'join [Sokr] as sk on wp.sokr_id=sk.id'#13#10#9'where wp.' +
+      'id=:idPlan'
+    Parameters = <
+      item
+        Name = 'idPlan'
+        Attributes = [paSigned]
+        DataType = ftInteger
+        Precision = 10
+        Size = 4
+        Value = 0
+      end>
+    Prepared = True
+    Left = 96
+    Top = 64
+    object adodsCurriculumID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object adodsCurriculumKod: TStringField
+      FieldName = 'Kod'
+      Size = 50
+    end
+    object adodsCurriculumSpec: TStringField
+      FieldName = 'Spec'
+      Size = 100
+    end
+    object adodsCurriculumSpez: TStringField
+      FieldName = 'Spez'
+      Size = 100
+    end
+    object adodsCurriculumKval: TStringField
+      FieldName = 'Kval'
+      Size = 100
+    end
+    object adodsCurriculumSokr: TStringField
+      FieldName = 'Sokr'
+      Size = 50
+    end
+    object adodsCurriculumPlan_type: TIntegerField
+      FieldName = 'Plan_type'
+    end
+  end
+  object dsCurriculum: TDataSource
+    DataSet = adodsCurriculum
+    Left = 96
+    Top = 112
+  end
+  object ADODSQualifications: TADODataSet
+    Active = True
+    Connection = adocUPlan
+    CursorType = ctStatic
+    Filtered = True
+    CommandText = 'select id, name from kvalifikatsii'
+    Parameters = <>
+    Prepared = True
+    Left = 328
+    Top = 72
+    object ADODSQualificationsid: TAutoIncField
+      FieldName = 'id'
+      ReadOnly = True
+    end
+    object ADODSQualificationsname: TStringField
+      FieldName = 'name'
+      Size = 100
+    end
+  end
+  object DSQualifications: TDataSource
+    DataSet = ADODSQualifications
+    Left = 328
+    Top = 120
+  end
+end
